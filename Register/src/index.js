@@ -1,11 +1,14 @@
 const express = require('express');
-require ('./database')
+
+const multerInit= require('./config/multer.config');
 
 const usersRoutes = require('./routes/users.routes');
 
+require ('./config/db.config');
+
 const app = express();
 
-app.use(express.json());
+app.use(multerInit);
 app.use(usersRoutes);
 
 app.listen(3000, ()=>{

@@ -2,9 +2,9 @@ const nodemailer = require('nodemailer');
 const hbs = require('nodemailer-express-handlebars');
 const path = require('path')
 const {google} = require('googleapis')
-const viewPath =  path.resolve(__dirname, './templates/views/');
-const partialsPath = path.resolve(__dirname, './templates/partials');
-const creds = require('./credentials.json');
+const viewPath =  path.resolve(__dirname, '../templates/views/');
+const partialsPath = path.resolve(__dirname, '../templates/partials');
+const creds = require('../credentials.json');
 
 
 
@@ -45,25 +45,21 @@ module.exports = async (req,res) => {
             subject: 'Verifica tu correo electrónico, SHOPI',
             template: 'index',
             context: {
-                url: 'google.com',
+                url: `http://localhost:5000/verify/${req.query.token}`,
                 name: req.query.name
             }
                 
         };
 
-        //following function has to call inside the sendMail 
+        
 
         transporter.use('compile', hbs({
             viewEngine: {
-            //extension name
             extName: '.handlebars',
-            // layout path declare
             layoutsDir: viewPath,
             defaultLayout: false,
-            //partials directory path
             partialsDir: partialsPath
             },
-            //View path declare
             viewPath: viewPath,
             extName: '.handlebars',
         }));
