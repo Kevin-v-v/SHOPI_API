@@ -11,12 +11,12 @@ const creds = require('../credentials.json');
 module.exports = async (req,res) => {
     
     const oAuth2Client = new google.auth.OAuth2(
-        creds.ID_CLIENTE,
-        creds.SECRET,
+        process.env.MAIL_ID_CLIENTE,
+        process.env.MAIL_SECRET,
         'https://developers.google.com/oauthplayground'
     )
     
-    oAuth2Client.setCredentials({refresh_token: creds.REFRESH_TOKEN});
+    oAuth2Client.setCredentials({refresh_token: process.env.MAIL_REFRESH_TOKEN});
 
     try{
         const accessToken = await oAuth2Client.getAccessToken();
@@ -24,28 +24,28 @@ module.exports = async (req,res) => {
             service: 'gmail',
             auth: {
                 type: 'OAuth2',
-                user: creds.USER,
-                clientId: creds.ID_CLIENTE,
-                clientSecret: creds.SECRET,
-                refreshToken: creds.REFRESH_TOKEN,
+                user: process.env.MAIL_USER,
+                clientId: process.env.MAIL_ID_CLIENTE,
+                clientSecret: process.env.MAIL_SECRET,
+                refreshToken: process.env.MAIL_REFRESH_TOKEN,
                 accessToken: accessToken
             }
         });
-        transporter.verify(function (error, success) {
-            if (error) {
-            console.log(error);
-            } else {
-            console.log(success);
-            }
-        });
+        // transporter.verify(function (error, success) {
+        //     if (error) {
+        //     console.log(error);
+        //     } else {
+        //     console.log(success);
+        //     }
+        // });
 
         var mailOptions = {
-            from: creds.USER,
+            from: process.env.MAIL_USER,
             to: req.query.email,
             subject: 'Verifica tu correo electrónico, SHOPI',
             template: 'index',
             context: {
-                url: `http://localhost:5000/verify/${req.query.token}`,
+                url: `http://${process.env.HOST}:${process.env.PORT}/verify/${req.query.token}`,
                 name: req.query.name
             }
                 
@@ -66,11 +66,17 @@ module.exports = async (req,res) => {
 
         transporter.sendMail(mailOptions, function(error, info){
             if (error) {
-            console.log(error);
-            res.json(error)
+            console.log("[Registration] " + error);
+            res.json({
+                success: false,
+                msg: "Error al enviar el correo"
+            });
             } else {
             console.log('Email sent: ' + info.response);
-            res.json({success: true});
+            res.json({
+                success: true,
+                msg: "Correo enviado"
+            });
             }
         });
     }catch(error){

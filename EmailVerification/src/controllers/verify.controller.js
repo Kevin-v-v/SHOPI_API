@@ -3,28 +3,43 @@ const {getTokenData} = require('../config/jwt.config');
 
 
 module.exports = async (req,res)=>{
-    try{
-        console.log(req.params)
-        let data = getTokenData(req.params.token);
+    
+    console.log(req.params)
+    let data = getTokenData(req.params.token);
 
-        if(data == null){
-            return res.json({
-                success: false,
-                msg: "Error al obtener datos del usuario"
-            })
-        }
-        console.log(data);
-        const user = await User.findById(data.data.code) || null;
+    if(data == null){
+        return res.json({
+            success: false,
+            msg: "Error al obtener datos del usuario"
+        })
+    }
+
+    let user;
+
+    try{
+         user = await User.findById(data.data.code) || null;
         if(!user){
             return res.json({
                 success: false,
-                msg: "Usuario no existE"
+                msg: "El usuario no existe"
             })
         }
         user.user_status = 1;
-        await user.save();
+    }catch(error){
+        console.log(error);
+        return res.json({
+            success: false,
+            msg: "Error al verificar el correo electrónico"
+        })
 
-        return res.send("Verificadisimo papu");
+    }
+
+    try{
+        await user.save();
+        return res.json({
+            success: true,
+            msg: "Verificación exitosa"
+        })
         
 
     }catch(error){

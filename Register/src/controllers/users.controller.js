@@ -5,7 +5,8 @@ const {getToken} = require('../config/jwt.config');
 module.exports = {
     register : async function (req,res){
         let pass = req.body.password;
-        if(!/^(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[A-Z])(?=.*[a-z])\S{8,16}$/gm.test(pass)){
+        let regex = /^(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[A-Z])(?=.*[a-z])\S{8,16}$/gm;
+        if(!regex.test(pass)){
             return res.json({
                 success : false,
                 msg: 'Contraseña no segura'
@@ -37,15 +38,22 @@ module.exports = {
                 headers: {}
             };
 
-            console.log('this is the token ' + token);
             request(options, (error,res,body)=>{
-                if(error) console.log(error);
-                else console.log(body);
-            })
-            res.json(userSaved);
+                if(error) console.log("[Registration] Mail Result: " + error);
+                else console.log("[Registration] Mail Result: " + body);
+            });
+            //manda correo aunque no jale el correo
+            res.json({
+                success: true,
+                msg: "Correo enviado"
+            });
             
         }catch(err){
-            res.json(err);
+            console.log("[Registration] Save Result: " + err);
+            res.json({
+                success: false,
+                msg: "Error al guardar el usuario"
+            });
         }
     }
 }

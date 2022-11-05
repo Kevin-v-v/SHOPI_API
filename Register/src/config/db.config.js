@@ -1,7 +1,7 @@
 const {connect} = require('mongoose');
 
-connect("mongodb://localhost/SHOPI").then(db=>{
-    console.log('DB connected to', db.connection.name);
+connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_LOCATION}`).then(db=>{
+    console.log('[Registration] Database connected to', db.connection.name);
 }).catch(err=>{
     console.log(err);
 });
