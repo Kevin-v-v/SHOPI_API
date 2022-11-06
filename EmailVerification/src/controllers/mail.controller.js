@@ -4,7 +4,7 @@ const path = require('path')
 const {google} = require('googleapis')
 const viewPath =  path.resolve(__dirname, '../templates/views/');
 const partialsPath = path.resolve(__dirname, '../templates/partials');
-const creds = require('../credentials.json');
+const {getToken} = require('../config/jwt.config');
 
 
 
@@ -38,14 +38,15 @@ module.exports = async (req,res) => {
         //     console.log(success);
         //     }
         // });
-
+        console.log("id " + req.query.id);
+        const token = getToken({email: req.query.email, code: req.query.id});
         var mailOptions = {
             from: process.env.MAIL_USER,
             to: req.query.email,
             subject: 'Verifica tu correo electrónico, SHOPI',
             template: 'index',
             context: {
-                url: `http://${process.env.HOST}:${process.env.PORT}/verify/${req.query.token}`,
+                url: `http://${process.env.HOST}:${process.env.PORT}/verify/${token}`,
                 name: req.query.name
             }
                 
@@ -81,7 +82,7 @@ module.exports = async (req,res) => {
         });
     }catch(error){
         console.log(error);
-        res.json(error);
+        res.json({success: false, msg: "Error fatal al enviar el correo"});
     }
 }
 

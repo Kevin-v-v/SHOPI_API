@@ -10,15 +10,15 @@ const getToken = (payload)=>{
 const getTokenData = (token)=>{
     let data = null;
     jwt.verify(token, process.env.SECRET_JWT, (err, decoded)=>{
-        if(err) {
-            console.log(err);
-            return null;
+        if(decoded) {
+            data = decoded;
         }
         else {
-            data = decoded;
-            return data;
+            console.log(err);
         }
+        
     });
+    return data;
 }
 module.exports = {
     getToken,

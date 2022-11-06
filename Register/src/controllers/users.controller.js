@@ -1,7 +1,7 @@
 const User = require('../models/User.model');
 const request = require('request');
-const {getToken} = require('../config/jwt.config');
-
+///^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&#.$($)$-$_])[A-Za-z\d$@$!%*?&#.$($)$-$_]{8,15}$/
+///^(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[A-Z])(?=.*[a-z])\S{8,16}$/gm;
 module.exports = {
     register : async function (req,res){
         let pass = req.body.password;
@@ -30,23 +30,25 @@ module.exports = {
 
         try{
             const userSaved = await user.save(); 
-            const token = getToken({email: userSaved.email, code: userSaved._id});
-
+            console.log(userSaved._id);
             const options = {
-                url: `http://localhost:5000/sendMail?email=${data.email}&name=${data.name}&token=${token}`,
+                url: `http://localhost:5000/sendMail?email=${data.email}&name=${data.name}&id=${userSaved._id}`,
                 method: 'GET',
                 headers: {}
             };
-
+            
+            let body_response_mail;
             request(options, (error,res,body)=>{
+                body_response_mail = body;
                 if(error) console.log("[Registration] Mail Result: " + error);
                 else console.log("[Registration] Mail Result: " + body);
             });
             //manda correo aunque no jale el correo
-            res.json({
-                success: true,
-                msg: "Correo enviado"
-            });
+            res.json(JSON.parse(body_response_mail))
+            //res.json({
+            //     success: true,
+            //     msg: "Correo enviado"
+            // });
             
         }catch(err){
             console.log("[Registration] Save Result: " + err);

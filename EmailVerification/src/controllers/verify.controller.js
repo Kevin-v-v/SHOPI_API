@@ -7,7 +7,7 @@ module.exports = async (req,res)=>{
     console.log(req.params)
     let data = getTokenData(req.params.token);
 
-    if(data == null){
+    if(!data){
         return res.json({
             success: false,
             msg: "Error al obtener datos del usuario"
@@ -17,6 +17,7 @@ module.exports = async (req,res)=>{
     let user;
 
     try{
+        console.log(data.data.code);
          user = await User.findById(data.data.code) || null;
         if(!user){
             return res.json({
