@@ -82,7 +82,7 @@ module.exports = async (req,res) => {
         });
     }catch(error){
         console.log(error);
-        res.json({success: false, msg: "Error fatal al enviar el correo"});
+        res.json({success: false, msg: "Error al enviar el correo"});
     }
 }
 
