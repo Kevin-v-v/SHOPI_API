@@ -1,5 +1,5 @@
 const {Schema, model} = require('mongoose');
-
+const bcrypt = require('bcrypt');
 
 let userSchema = new Schema({
     username: {
@@ -35,19 +35,22 @@ let userSchema = new Schema({
         type: Number,
         match: /^[0-2]$/gm
     },
-    password_hash: {
-        type: String,
-        required: true
-    },
-    image: {
-        type: String,
-        required: true
-    }
+    password_hash: String,
+    image: String
 
 },{
     timestamps: true,
     versionKey: false
 });
 
+userSchema.virtual('password').set(function (value){
+    return new Promise((res, rej)=>{
+        bcrypt.hash(value, 10, (err, hash)=>{
+            this.set({password_hash: hash}); 
+            res();
+        }) 
+    });
+     
+});
 
 module.exports = model('User', userSchema);

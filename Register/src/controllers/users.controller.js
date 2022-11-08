@@ -1,8 +1,19 @@
 const User = require('../models/User.model');
 const request = require('request');
 const axios = require('axios').default || require('axios');
+const bcrypt = require('bcrypt');
+
 ///^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&#.$($)$-$_])[A-Za-z\d$@$!%*?&#.$($)$-$_]{8,15}$/
 ///^(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[A-Z])(?=.*[a-z])\S{8,16}$/gm;
+
+function getPasswordHash(password){
+    return new Promise((res, rej)=>{
+        bcrypt.hash(password, 10, (err, hash)=>{ 
+            if(err) rej(err)
+            else res(hash);
+        }) 
+    });
+}
 module.exports = {
     register : async function (req,res){
         let pass = req.body.password;
@@ -13,7 +24,19 @@ module.exports = {
                 msg: 'Contraseña no segura'
             });
         }
-
+        let hash;
+        try{
+        hash = await getPasswordHash(req.body.password);
+        
+        // getPasswordHash(req.body.password).then((hash)=>{
+        //     console.log(hash);
+        //     this.password_hash = hash;
+        // }).catch(err=>{
+        //     console.log("falló la contraseña hash");
+        // });
+        }catch(err){
+            console.log("Couldn't hash" + err);
+        }
         let data = {
             username: req.body.username,
             name: req.body.name,
@@ -22,7 +45,7 @@ module.exports = {
             email: req.body.email,
             user_type: 1,
             user_status: 0,
-            password: req.body.password,
+            password_hash: hash,
             image: req.file.path
         }
 
@@ -38,7 +61,9 @@ module.exports = {
                 msg: "Error al guardar el usuario"
             });
         }
+        
         try{
+            console.log(await bcrypt.compare(req.body.password, userSaved.password_hash));
             const response = await axios.get('http://localhost:5000/sendMail',{
                 params:{
                     email: data.email,

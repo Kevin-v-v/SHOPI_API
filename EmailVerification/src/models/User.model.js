@@ -15,9 +15,10 @@ let userSchema = new Schema({
         required: true
     },
     phone: {
-        type: Number,
+        type: String,
         required: true,
-        unique: true
+        unique: true,
+        match: /^[0-9]{10}$/gm
     },
     email: {
         type: String,
