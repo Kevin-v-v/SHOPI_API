@@ -25,7 +25,7 @@ app.use(session({
 
 require('./config/db.config');
 
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.json());
 app.use(loginRoutes);
 app.use(authRoutes);
 

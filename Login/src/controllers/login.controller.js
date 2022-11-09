@@ -14,24 +14,34 @@ module.exports = {
     login: function (req,res){
         const {email, password} = req.body;
         User.findOne({
-            where: {
-                email
-            }
+            email
         }).then(function(user){
             if(user){
                 return authenticatePassword(user, password).then(valid=>{
                     if(valid){
                         req.session.userId = user._id;
-                        res.send(user);
+                        res.send({
+                            success: true,
+                            msg: "Sesión iniciada"
+                        });
                     } 
-                    else res.status(401).send(null);
+                    else res.status(401).send({
+                        success: false,
+                        msg: "Usuario o contraseña no válidos"
+                    });
                 });
             }else{
-                return null;
+                return res.status(401).send({
+                    success: false,
+                    msg: "Usuario o contraseña no válidos"
+                });
             }
         }).catch(err=>{
             console.log(err);
-            res.status(500).send(null);
-        })
+            res.status(500).send({
+                success: false,
+                msg: "Error al buscar usuario"
+            });
+        });
     }
 }

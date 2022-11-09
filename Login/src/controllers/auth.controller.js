@@ -6,15 +6,28 @@ module.exports = {
             User.findById(req.session.userId).then(user=>{
                 if(user){
                     req.user = user;
-                    res.status(200).send(user);
+                    res.status(200).send({
+                        success: true,
+                        msg: "Autenticado"
+                    });
+                }else{
+                    res.status(401).send({
+                    success: false,
+                    msg: "No autenticado"
+                    });
                 }
-                res.status(500).send();
             }).catch(err=>{
                 console.log(err);
-                res.status(401);
+                res.status(401).send({
+                    success: false,
+                    msg: "No autenticado"
+                });
             })
         }else{
-            res.status(401).send("Not Authenticated");
+            res.status(401).send({
+                success: false,
+                msg: "No autenticado"
+            });
         }
     }
 }
