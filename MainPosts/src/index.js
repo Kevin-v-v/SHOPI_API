@@ -1,8 +1,14 @@
 const express = require('express');
+const cors = require('cors')
+const app = express()
+ 
 
-const app = express();
+app.set('trust proxy', (ip) => {
+    if (ip === '127.0.0.1:80') return true // trusted IPs
+    else return false
+  });
 
-app.get('/', (req,res)=>{
+app.get('/posts', (req,res)=>{
     res.send("How did we get here?")
 })
 

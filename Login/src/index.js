@@ -6,7 +6,7 @@ const dotenv = require('dotenv');
 const path = require('path');
 const session = require('express-session');
 const mongoStore = require('connect-mongo');
-
+const bodyParser = require('body-parser');
 
 dotenv.config({
     path: path.resolve(__dirname, '../' + process.env.NODE_ENV + '.env')
@@ -24,7 +24,8 @@ app.use(session({
 }));
 
 require('./config/db.config');
-app.use(express.json());
+
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(loginRoutes);
 app.use(authRoutes);
 
