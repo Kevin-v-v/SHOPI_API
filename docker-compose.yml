@@ -1,0 +1,20 @@
+services:
+  login:
+    container_name: login
+    image: login_test
+    ports: 
+      -"3500:3500"
+  register:
+    container_name: register
+    image: register_test
+    ports: 
+      -"3000:3000"
+  emailverification:
+    container_name: emailverification
+    image: emailv_test
+    ports: 
+      -"5000:5000"  
+  gateway:
+    container_name: gateway
+    image: nginx
+    
