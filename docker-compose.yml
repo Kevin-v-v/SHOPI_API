@@ -4,21 +4,24 @@ services:
     restart: always
     env_file:
       - ./Login/development.env
-    image: login_test
+    build:
+      context: ./Login
     expose: ["3500"]
   register:
     container_name: register
     restart: always
     env_file:
       - ./Register/development.env
-    image: register_test
+    build:
+      context: ./Register
     expose: ["3000"]
   emailverification:
     container_name: emailverification
     restart: always
     env_file:
       - ./EmailVerification/development.env
-    image: emailv_test
+    build:
+      context: ./EmailVerification
     expose: ["5000"] 
   gateway:
     container_name: gateway

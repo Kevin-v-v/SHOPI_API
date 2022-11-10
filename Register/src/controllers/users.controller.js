@@ -16,7 +16,7 @@ function getPasswordHash(password){
 module.exports = {
     register : async function (req,res){
         let pass = req.body.password;
-        let regex = /^(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[A-Z])(?=.*[a-z])\S{8,16}$/gm;
+        let regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W)[A-Za-z\d\W]{8,16}$/
         if(!regex.test(pass)){
             return res.json({
                 success : false,

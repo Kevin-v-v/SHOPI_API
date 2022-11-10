@@ -1,6 +1,12 @@
 const express = require('express');
-
+const createRoutes = require('./routes/create.routes');
+const multerInit = require('./config/multer.config');
 const app = express();
+
+
+app.use(multerInit);
+app.use(createRoutes);
+
 
 app.listen(process.env.PORT, process.env.HOST, ()=>{
     console.log('Server on ' + process.env.HOST + ":" + process.env.PORT);
