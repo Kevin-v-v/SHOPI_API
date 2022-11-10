@@ -1,5 +1,4 @@
 const User = require('../models/User.model');
-const request = require('request');
 const axios = require('axios').default || require('axios');
 const bcrypt = require('bcrypt');
 
@@ -63,8 +62,7 @@ module.exports = {
         }
         
         try{
-            console.log(await bcrypt.compare(req.body.password, userSaved.password_hash));
-            const response = await axios.get('http://localhost:5000/sendMail',{
+            const response = await axios.get('http://emailverification:5000/sendMail',{
                 params:{
                     email: data.email,
                     name: data.name,

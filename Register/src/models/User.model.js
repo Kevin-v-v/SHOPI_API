@@ -5,7 +5,9 @@ let userSchema = new Schema({
     username: {
         type: String,
         unique: true,
-        required: true
+        required: true,
+        minLength: 3,
+        maxLength: 20
     },
     name: {
         type: String,
@@ -29,11 +31,13 @@ let userSchema = new Schema({
     },
     user_type: {
         type: Number,
-        match: /^[0-1]$/gm
+        min: 0,
+        max: 1
     },
     user_status: {
         type: Number,
-        match: /^[0-2]$/gm
+        min: 0,
+        max: 2
     },
     password_hash: {
         type: String,

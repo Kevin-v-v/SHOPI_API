@@ -3,6 +3,6 @@ const verifyController = require('../controllers/verify.controller');
 
 let router = Router();
 
-router.get('/verify/:token', verifyController);
+router.get('/api/verify/:token', verifyController);
 
 module.exports = router;

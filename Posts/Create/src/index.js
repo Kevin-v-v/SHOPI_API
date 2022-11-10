@@ -1,3 +1,35 @@
+const express = require('express');
+
+const app = express();
+
+app.listen(process.env.PORT, process.env.HOST, ()=>{
+    console.log('Server on ' + process.env.HOST + ":" + process.env.PORT);
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // let date_data = {
 //     available_at: {
 //         monday : {

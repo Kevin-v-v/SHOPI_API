@@ -46,7 +46,7 @@ module.exports = async (req,res) => {
             subject: 'Verifica tu correo electrónico, SHOPI',
             template: 'index',
             context: {
-                url: `http://${process.env.HOST}:${process.env.PORT}/verify/${token}`,
+                url: `http://${process.env.HOST}:${process.env.PORT}/api/verify/${token}`,
                 name: req.query.name
             }
                 

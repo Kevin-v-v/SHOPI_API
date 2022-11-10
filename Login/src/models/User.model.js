@@ -1,11 +1,13 @@
 const {Schema, model} = require('mongoose');
-const bcrypt = require('bcrypt');
+
 
 let userSchema = new Schema({
     username: {
         type: String,
         unique: true,
-        required: true
+        required: true,
+        minLength: 3,
+        maxLength: 20
     },
     name: {
         type: String,
@@ -29,28 +31,27 @@ let userSchema = new Schema({
     },
     user_type: {
         type: Number,
-        match: /^[0-1]$/gm
+        min: 0,
+        max: 1
     },
     user_status: {
         type: Number,
-        match: /^[0-2]$/gm
+        min: 0,
+        max: 2
     },
-    password_hash: String,
-    image: String
+    password_hash: {
+        type: String,
+        required: true
+    },
+    image: {
+        type: String,
+        required: true
+    }
 
 },{
     timestamps: true,
     versionKey: false
 });
 
-userSchema.virtual('password').set(function (value){
-    return new Promise((res, rej)=>{
-        bcrypt.hash(value, 10, (err, hash)=>{
-            this.set({password_hash: hash}); 
-            res();
-        }) 
-    });
-     
-});
 
 module.exports = model('User', userSchema);

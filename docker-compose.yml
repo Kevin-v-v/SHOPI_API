@@ -1,20 +1,30 @@
 services:
   login:
     container_name: login
+    restart: always
+    env_file:
+      - ./Login/development.env
     image: login_test
-    ports: 
-      -"3500:3500"
+    expose: ["3500"]
   register:
     container_name: register
+    restart: always
+    env_file:
+      - ./Register/development.env
     image: register_test
-    ports: 
-      -"3000:3000"
+    expose: ["3000"]
   emailverification:
     container_name: emailverification
+    restart: always
+    env_file:
+      - ./EmailVerification/development.env
     image: emailv_test
-    ports: 
-      -"5000:5000"  
+    expose: ["5000"] 
   gateway:
     container_name: gateway
-    image: nginx
+    restart: always
+    build:
+      context: ./Orquestador
+    ports: ["80:8080"]
+    
     
