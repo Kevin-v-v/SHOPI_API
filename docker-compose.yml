@@ -66,5 +66,15 @@ services:
     build:
       context: ./Posts/Create
     expose: ["3150"]
+  toggle-posts:
+    container_name: toggle-posts
+    restart: always
+    env_file:
+      - ./Posts/Toggle/development.env
+    depends_on:
+      - database
+    build:
+      context: ./Posts/Toggle
+    expose: ["4445"]
     
     
