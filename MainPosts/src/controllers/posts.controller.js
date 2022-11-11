@@ -67,6 +67,7 @@ module.exports = {
                     }
                     result.data.push({
                         id: post._id,
+                        title: post.title,
                         description: post.description,
                         user_name : user.name,
                         user_last_name: user.last_name,

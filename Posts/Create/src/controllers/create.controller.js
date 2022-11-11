@@ -1,9 +1,11 @@
 const Post = require('../models/Post.model');
 const User = require('../models/User.model');
 module.exports = async function (req, res){
-    const {title, description, user_id, category} = req.body;
+    const {title, description, category} = req.body;
+    
     const image = req.file;
-
+    const user_id = req.headers['user-id'];
+    console.log(user_id);
     try{
         let user = await User.findOne({_id: user_id});
         if(user){

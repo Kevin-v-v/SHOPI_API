@@ -1,6 +1,6 @@
 const {connect} = require('mongoose');
 
-connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_LOCATION}`).then(db=>{
+connect(`mongodb://database:27017/SHOPI`).then(db=>{
     console.log('[EmailVerification] DB connected to', db.connection.name);
 }).catch(err=>{
     console.log(err);

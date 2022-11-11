@@ -5,7 +5,9 @@ module.exports = {
         if(req.session.userId){
             User.findById(req.session.userId).then(user=>{
                 if(user){
-                    req.user = user;
+                    let user_id_string = user._id.toString();
+                    res.setHeader('User-Id', user_id_string);
+                    //req.user = user;
                     res.status(200).send({
                         success: true,
                         msg: "Autenticado"
