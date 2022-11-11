@@ -1,6 +1,47 @@
 const User = require('../models/User.model');
 const Post = require('../models/Post.model');
 
+async function hasCategoryThenFind(category = null){
+    let posts;
+    //try{
+        if(category){
+            posts = await Post.find({status: 1, category}).skip(page * 10).sort({ _id: -1 }).limit(10)
+        }else{
+            posts = await Post.find({status: 1}).skip(page * 10).sort({ _id: -1 }).limit(10)
+        }
+        return posts;
+    //}catch(err){
+        //return err;
+    //}
+}
+
+async function hasCategoryThenCount(category = null){
+    let count;
+
+    try{
+        if(category){
+            count = await Post.countDocuments({status: 1, category})
+        }else{
+            count = await Post.countDocuments({status: 1});
+        }
+    }catch(err){
+        console.log(err);
+    }
+    return count;
+}
+
+function validatePages(count, page, pages){
+
+    if(count == 0 || pages == 0){
+        return 0; 
+    }
+    if(page > pages){
+        return -1;
+    }
+    return 1;
+}
+
+
 
 module.exports = {
     latest: async function(req,res){
@@ -11,33 +52,32 @@ module.exports = {
         if(!Number.isNaN(req.query.page)){
             page = req.query.page - 1;
         } 
+
             let posts;
             let pages = 0;
             let count = 0;
         try{
-            if(category){
-                count = await Post.countDocuments({status: 1, category})
-            }else{
-                count = await Post.countDocuments({status: 1});
-            }
-            if(count > 0){
+             count = await hasCategoryThenCount(category);
+            if(count){
                 pages = Math.ceil(count/10);
-                if(page > pages){
-                    return res.json({
+                switch(validatePages(count, page, pages)){
+                    case -1: 
+                        return res.json({
                         success: false,
                         msg: "Página no válida"
                         });
-                }else{
-                    if(category){
-                        posts = await Post.find({status: 1, category}).skip(page * 10).sort({ _id: -1 }).limit(10)
-                    }else{
-                        posts = await Post.find({status: 1}).skip(page * 10).sort({ _id: -1 }).limit(10)
-                    }
+                    case 0:
+                        return res.json({
+                            success: true, 
+                            total_count
+                        });
+                    case 1:
+                        posts = await hasCategoryThenFind(category);
                 }
             }else{
                 return res.json({
-                    success: true, 
-                    total_count
+                    success: false,
+                    msg: "Error al buscar publicaciones"
                 });
             }
 

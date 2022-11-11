@@ -1,4 +1,4 @@
-const {Schema, model} = require('mongoose');
+const {Schema, model, default: mongoose} = require('mongoose');
 
 let postSchema = new Schema({
     title: {
@@ -17,12 +17,15 @@ let postSchema = new Schema({
         max: 2
     },
     user_id: {
-        type: ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
     },
     image: {
         type: String,
         required: true
+    },
+    category: {
+        type: String
     }
 
 },{

@@ -30,5 +30,5 @@ app.use(loginRoutes);
 app.use(authRoutes);
 
 app.listen(process.env.PORT, process.env.HOST, ()=>{
-    console.log('Server on ' + process.env.HOST + ":" + process.env.PORT);
+    console.log('[Login] Server on ' + process.env.HOST + ":" + process.env.PORT);
 });

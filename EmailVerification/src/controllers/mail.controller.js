@@ -5,7 +5,7 @@ const {google} = require('googleapis')
 const viewPath =  path.resolve(__dirname, '../templates/views/');
 const partialsPath = path.resolve(__dirname, '../templates/partials');
 const {getToken} = require('../config/jwt.config');
-
+const User = require('../models/User.model');
 
 
 module.exports = async (req,res) => {
@@ -38,16 +38,24 @@ module.exports = async (req,res) => {
         //     console.log(success);
         //     }
         // });
-        console.log("id " + req.query.id);
-        const token = getToken({email: req.query.email, code: req.query.id});
+        let user;
+        try{
+        user = await User.findById(req.query.id);
+        }catch(err){
+            return res.status(500).json({
+                success: false,
+                msg: "Usuario no válido"
+            })
+        }
+        const token = getToken({email: user.email, code: req.query.id});
         var mailOptions = {
             from: process.env.MAIL_USER,
-            to: req.query.email,
+            to: user.email,
             subject: 'Verifica tu correo electrónico, SHOPI',
             template: 'index',
             context: {
-                url: `http://${process.env.HOST}:${process.env.PORT}/api/verify/${token}`,
-                name: req.query.name
+                url: `http://${process.env.GATEWAY_HOST}:${process.env.GATEWAY_PORT}/api/verify/${token}`,
+                name: user.name
             }
                 
         };

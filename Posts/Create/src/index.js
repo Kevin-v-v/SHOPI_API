@@ -1,15 +1,22 @@
 const express = require('express');
 const createRoutes = require('./routes/create.routes');
 const multerInit = require('./config/multer.config');
+const path = require('path');
+const dotenv = require('dotenv');
+
+dotenv.config({
+    path: path.resolve(__dirname, '../' + process.env.NODE_ENV + '.env')
+});
+
+require('./config/db.config');
+
 const app = express();
-
-
 app.use(multerInit);
 app.use(createRoutes);
 
 
 app.listen(process.env.PORT, process.env.HOST, ()=>{
-    console.log('Server on ' + process.env.HOST + ":" + process.env.PORT);
+    console.log('[Posts Create] Server on ' + process.env.HOST + ":" + process.env.PORT);
 });
 
 
