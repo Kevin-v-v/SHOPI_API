@@ -25,11 +25,20 @@ module.exports = {
                 }
                 return authenticatePassword(user, password).then(valid=>{
                     if(valid){
-                        req.session.userId = user_id;
-                        console.log(user._id);
+                        req.session.userId = user._id;
                         res.send({
                             success: true,
-                            msg: "Sesión iniciada"
+                            msg: "Sesión iniciada",
+                            user_data: {
+                                username: user.username,
+                                name: user.name,
+                                last_name: user.last_name,
+                                email: user.email,
+                                phone: user.phone,
+                                image: user.image,
+                                user_type: user.user_type,
+                                user_status: user.user_status
+                            }
                         });
                     } 
                     else res.status(401).send({

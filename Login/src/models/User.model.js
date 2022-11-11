@@ -32,12 +32,14 @@ let userSchema = new Schema({
     user_type: {
         type: Number,
         min: 0,
-        max: 1
+        max: 1,
+        required: true
     },
     user_status: {
         type: Number,
         min: 0,
-        max: 2
+        max: 2,
+        required: true
     },
     password_hash: {
         type: String,
