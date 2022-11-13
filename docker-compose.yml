@@ -1,37 +1,33 @@
 services:
   login:
     container_name: login
-    restart: always
+    restart: on-failure
     env_file:
       - ./Login/development.env
     build:
       context: ./Login
-    depends_on:
-      - database
     expose: ["3500"]
   register:
     container_name: register
-    restart: always
+    restart: on-failure
     env_file:
       - ./Register/development.env
     build:
       context: ./Register
     depends_on:
-      - database
+      - emailverification
     expose: ["3000"]
   emailverification:
     container_name: emailverification
-    restart: always
+    restart: on-failure
     env_file:
       - ./EmailVerification/development.env
     build:
       context: ./EmailVerification
-    depends_on:
-      - database
     expose: ["5000"] 
   gateway:
     container_name: gateway
-    restart: always
+    restart: on-failure
     build:
       context: ./Orquestador
     depends_on:
@@ -41,38 +37,32 @@ services:
       - main-posts
       - create-posts
     ports: ["80:8080"]
-  database:
-    container_name: database
-    restart: always
-    image: mongo:4.4.6
-    expose: ["27017"]
+  #database:
+  #  container_name: database
+  #  restart: on-failure
+  #  image: mongo:4.4.6
+  #  expose: ["27017"]
   main-posts:
     container_name: main-posts
-    restart: always
+    restart: on-failure
     env_file:
       - ./MainPosts/development.env
     build:
       context: ./MainPosts
-    depends_on:
-      - database
     expose: ["3350"]
   create-posts:
     container_name: create-posts
-    restart: always
+    restart: on-failure
     env_file:
       - ./Posts/Create/development.env
-    depends_on:
-      - database
     build:
       context: ./Posts/Create
     expose: ["3150"]
   toggle-posts:
     container_name: toggle-posts
-    restart: always
+    restart: on-failure
     env_file:
       - ./Posts/Toggle/development.env
-    depends_on:
-      - database
     build:
       context: ./Posts/Toggle
     expose: ["4445"]

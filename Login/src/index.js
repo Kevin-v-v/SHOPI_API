@@ -6,7 +6,6 @@ const dotenv = require('dotenv');
 const path = require('path');
 const session = require('express-session');
 const mongoStore = require('connect-mongo');
-const bodyParser = require('body-parser');
 
 dotenv.config({
     path: path.resolve(__dirname, '../' + process.env.NODE_ENV + '.env')
@@ -20,7 +19,7 @@ app.use(session({
     cookie: {
         maxAge: 1800000
     },
-    store: mongoStore.create({ mongoUrl: `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_LOCATION}` })
+    store: mongoStore.create({ mongoUrl: process.env.DB_CONNECTION_STRING })
 }));
 
 require('./config/db.config');
