@@ -3,11 +3,13 @@ const {Schema, model, default: mongoose} = require('mongoose');
 let postSchema = new Schema({
     title: {
         type: String,
-        required: true
+        required: true,
+        minLength: 3
     },
     description: {
         type: String,
         required: true,
+        minLength: 5,
         maxLength: 500
     },
     status: {

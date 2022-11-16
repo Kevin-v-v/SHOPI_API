@@ -11,11 +11,13 @@ let userSchema = new Schema({
     },
     name: {
         type: String,
-        required: true
+        required: true,
+        minLength: 1
     },
     last_name: {
         type: String,
-        required: true
+        required: true,
+        minLength: 1
     },
     phone: {
         type: String,

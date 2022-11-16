@@ -1,5 +1,6 @@
 const Post = require('../models/Post.model');
 const User = require('../models/User.model');
+const Category = require('../models/Category.model');
 module.exports = async function (req, res){
     const {title, description, category} = req.body;
     
@@ -49,7 +50,12 @@ module.exports = async function (req, res){
             msg: "Error al buscar publicaciones repetidas"
         });
     }
-
+    let found = null;
+    try{
+        found = await Category.findOne({name: category});
+    }catch(err){
+        console.log("Error al encontrar categorias");
+    }
     let data = {
         title,
         description,
@@ -57,7 +63,7 @@ module.exports = async function (req, res){
         user_id,
         image: image.path
     };
-    if(category){
+    if(found){
         data.category = category;
     }
     let post = Post(data);

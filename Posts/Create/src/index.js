@@ -8,8 +8,8 @@ dotenv.config({
     path: path.resolve(__dirname, '../' + process.env.NODE_ENV + '.env')
 });
 
-require('./config/db.config');
-
+const db_connection = require('./config/db.config');
+db_connection();
 const app = express();
 app.use(multerInit);
 app.use(createRoutes);
