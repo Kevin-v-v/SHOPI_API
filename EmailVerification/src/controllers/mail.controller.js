@@ -40,14 +40,14 @@ module.exports = async (req,res) => {
         // });
         let user;
         try{
-        user = await User.findById(req.query.id);
+        user = await User.findOne({username: req.query.username});
         }catch(err){
             return res.status(500).json({
                 success: false,
                 msg: "Usuario no válido"
             })
         }
-        const token = getToken({email: user.email, code: req.query.id});
+        const token = getToken({email: user.email, code: user._id});
         var mailOptions = {
             from: process.env.MAIL_USER,
             to: user.email,

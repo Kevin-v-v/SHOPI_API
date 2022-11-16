@@ -64,7 +64,7 @@ module.exports = {
         try{
             const response = await axios.get('http://emailverification:5000/api/sendmail',{
                 params:{
-                    id: userSaved._id
+                    username: userSaved.username
                 }
             });
             response.data.success = true;

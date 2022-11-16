@@ -1,6 +1,6 @@
 services:
   login:
-    container_name: login
+    container_name: login 
     restart: on-failure
     env_file:
       - ./Login/development.env
