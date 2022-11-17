@@ -8,7 +8,7 @@ module.exports = {
         let total_count = 0;
         let category = req.query.category;
 
-        if(!Number.isNaN(req.query.page)){
+        if(!isNaN(req.query.page)){
             page = req.query.page - 1;
         } 
             let posts;
@@ -79,6 +79,52 @@ module.exports = {
                 }
             }
             res.json(result);
+    },
+    getOne: async function(req,res){
+        const post_id = req.params.id;
+        try{
+            let post = await Post.findById(post_id); 
+            if(post){
+                try{
+                    let user = await User.findById(post.user_id);
+                    if(user){
+                    return res.json({
+                        success: true,
+                        msg: "",
+                        data : { 
+                            id: post._id,
+                            title: post.title,
+                            description: post.description,
+                            user_name : user.name,
+                            user_last_name: user.last_name,
+                            image: post.image,
+                            whatsapp_url : `https://wa.me/+521${user.phone}`
+                        }
+                    });
+                    }else{
+                        return res.status(500).json({
+                            success: false,
+                            msg: "Vendedor no válido"
+                        });
+                    }
+                }catch(err){
+                    return res.status(500).json({
+                        success: false,
+                        msg: "Error al buscar informacion del vendedor"
+                    });
+                }
+            }else{
+                return res.status(404).json({
+                    success: false,
+                    msg: "Post no encontrado"
+                });
+            }
+        }catch(err){
+            return res.status(500).json({
+                success: false,
+                msg: "Error al buscar el post"
+            });
+        }
     }
 
 
