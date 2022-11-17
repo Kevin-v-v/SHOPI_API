@@ -85,6 +85,12 @@ module.exports = {
         try{
             let post = await Post.findById(post_id); 
             if(post){
+                if(post.status != 1){
+                    return res.status(404).json({
+                        success: false,
+                        msg: "El post no está disponible"
+                    });
+                }
                 try{
                     let user = await User.findById(post.user_id);
                     if(user){

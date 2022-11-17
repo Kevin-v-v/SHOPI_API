@@ -41,6 +41,8 @@ services:
       - emailverification
       - main-posts
       - create-posts
+      - delete-posts
+      - toggle-posts
     ports: ["80:8080"]
   database:
     container_name: database
