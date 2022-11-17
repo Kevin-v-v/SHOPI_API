@@ -3,14 +3,20 @@ const createRoutes = require('./routes/create.routes');
 const multerInit = require('./config/multer.config');
 const path = require('path');
 const dotenv = require('dotenv');
+const cors = require('cors');
 
 dotenv.config({
     path: path.resolve(__dirname, '../' + process.env.NODE_ENV + '.env')
 });
+var corsOptions = {
+    origin: '*'
+    //optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  }
 
 const db_connection = require('./config/db.config');
 db_connection();
 const app = express();
+app.use(cors(corsOptions));
 app.use(multerInit);
 app.use(createRoutes);
 
