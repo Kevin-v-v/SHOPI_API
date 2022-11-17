@@ -77,5 +77,14 @@ services:
     build:
       context: ./Posts/Toggle
     expose: ["3080"]
-    
+  delete-posts:
+    container_name: delete-posts
+    restart: on-failure
+    env_file:
+      - ./Posts/Delete/development.env
+    depends_on:
+      - database
+    build:
+      context: ./Posts/Delete
+    expose: ["3060"]
     
