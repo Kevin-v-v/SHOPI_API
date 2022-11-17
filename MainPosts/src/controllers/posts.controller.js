@@ -59,7 +59,7 @@ module.exports = {
             };
 
            for(let post of posts){
-                    console.log(post);
+                    
                 try{
                     let user = await User.findById(post.user_id);
                     if(!user){

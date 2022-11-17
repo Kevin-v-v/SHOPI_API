@@ -6,7 +6,7 @@ module.exports = async function(){
     console.log('[Posts Create] Database connected to', db.connection.name);
     try{
         const total = await Category.countDocuments()
-        if(total = 0){
+        if(total === 0){
             await Category.insertMany([
                 {name: "Comida"},
                 {name: "Electrónica"},

@@ -8,6 +8,7 @@ module.exports = async function(req,res){
     try{
     let post = await Post.findOne({_id: post_id, user_id});
     if(post){
+        console.log(post);
         switch(post.status){
             case 0:
                 return res.json({

@@ -8,7 +8,7 @@ services:
       context: ./Login
     depends_on:
       - database
-    expose: ["3500"]
+    expose: ["3030"]
   register:
     container_name: register
     restart: on-failure
@@ -19,7 +19,7 @@ services:
     depends_on:
       - database
       - emailverification
-    expose: ["3000"]
+    expose: ["3020"]
   emailverification:
     container_name: emailverification
     restart: on-failure
@@ -29,7 +29,7 @@ services:
       context: ./EmailVerification
     depends_on:
       - database
-    expose: ["5000"] 
+    expose: ["3010"] 
   gateway:
     container_name: gateway
     restart: on-failure
@@ -56,7 +56,7 @@ services:
       context: ./MainPosts
     depends_on:
       - database
-    expose: ["3350"]
+    expose: ["3040"]
   create-posts:
     container_name: create-posts
     restart: on-failure
@@ -66,7 +66,7 @@ services:
       - database
     build:
       context: ./Posts/Create
-    expose: ["3150"]
+    expose: ["3050"]
   toggle-posts:
     container_name: toggle-posts
     restart: on-failure
@@ -76,6 +76,6 @@ services:
       - database
     build:
       context: ./Posts/Toggle
-    expose: ["4445"]
+    expose: ["3080"]
     
     

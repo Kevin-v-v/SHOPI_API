@@ -62,7 +62,7 @@ module.exports = {
         }
         
         try{
-            const response = await axios.get('http://emailverification:5000/api/sendmail',{
+            const response = await axios.get('http://emailverification:3010/api/sendmail',{
                 params:{
                     username: userSaved.username
                 }
