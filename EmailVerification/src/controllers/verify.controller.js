@@ -17,12 +17,17 @@ module.exports = async (req,res)=>{
     let user;
 
     try{
-        console.log(data.data.code);
-         user = await User.findById(data.data.code) || null;
+        user = await User.findById(data.data.code) || null;
         if(!user){
             return res.json({
                 success: false,
                 msg: "El usuario no existe"
+            })
+        }
+        if(user.user_status === 1){
+            return res.json({
+                success: false,
+                msg: "El usuario ya fue verificado"
             })
         }
         user.user_status = 1;

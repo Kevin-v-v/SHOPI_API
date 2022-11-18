@@ -36,7 +36,7 @@ module.exports = async function (req, res){
 
 
     try{
-        if(await Post.findOne({title, user_id})){
+        if(await Post.findOne({title, user_id, status:{$ne: 0}})){
             return res.json({
                 success: false,
                 msg: "Ya existe una publicación de este usuario con ese título"

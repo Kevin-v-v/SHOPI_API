@@ -10,6 +10,29 @@ const User = require('../models/User.model');
 
 module.exports = async (req,res) => {
     
+    let user;
+        try{
+        user = await User.findOne({username: req.query.username});
+        }catch(err){
+            return res.status(500).json({
+                success: false,
+                msg: "Error al buscar usuario"
+            });
+        }
+        if(!user){
+            return res.status(404).json({
+                success: false,
+                msg: "Usuario inválido"
+            });
+        }else{
+            if(user.user_status === 1){
+                return res.json({
+                    success: false,
+                    msg: "El usuario ya fue verificado"
+                });
+            }
+        }
+
     const oAuth2Client = new google.auth.OAuth2(
         process.env.MAIL_ID_CLIENTE,
         process.env.MAIL_SECRET,
@@ -38,21 +61,7 @@ module.exports = async (req,res) => {
         //     console.log(success);
         //     }
         // });
-        let user;
-        try{
-        user = await User.findOne({username: req.query.username});
-        }catch(err){
-            return res.status(500).json({
-                success: false,
-                msg: "Error al buscar usuario"
-            });
-        }
-        if(!user){
-            return res.status(404).json({
-                success: false,
-                msg: "Usuario inválido"
-            });
-        }
+        
         const token = getToken({email: user.email, code: user._id});
         var mailOptions = {
             from: process.env.MAIL_USER,
