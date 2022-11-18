@@ -43,6 +43,7 @@ services:
       - create-posts
       - delete-posts
       - toggle-posts
+      - update-posts
     ports: ["80:8080"]
   database:
     container_name: database
@@ -79,6 +80,16 @@ services:
     build:
       context: ./Posts/Toggle
     expose: ["3080"]
+  update-posts:
+    container_name: update-posts
+    restart: on-failure
+    env_file:
+      - ./Posts/Update/development.env
+    depends_on:
+      - database
+    build:
+      context: ./Posts/Update
+    expose: ["3070"]
   delete-posts:
     container_name: delete-posts
     restart: on-failure
