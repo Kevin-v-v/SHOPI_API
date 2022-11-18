@@ -27,8 +27,12 @@ module.exports = async function(req,res){
                 msg: "Ya existe un post con ese nombre que le pertenece al mismo usuario"
             })
         }
-        post.title = title;
-        post.description = description;
+        if(title){
+            post.title = title;
+        }
+        if(description){
+            post.description = description;
+        }
         try{
             if(category){
             found = await Category.findOne({name: category});
