@@ -55,7 +55,7 @@ module.exports = {
             userSaved = await user.save(); 
         }catch(err){
             console.log("[Registration] Save Result: " + err);
-            return res.json({
+            return res.status(500).json({
                 success: false,
                 msg: "Error al guardar el usuario"
             });

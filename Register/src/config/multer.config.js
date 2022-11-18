@@ -21,5 +21,5 @@ module.exports = multer({
         }
         cb("Error: File upload only supports the following filetypes - " + filetypes);
     },
-    limits: {fileSize: 4000000}
+    limits: {fileSize: 5000000}
 }).single('image');

@@ -44,8 +44,14 @@ module.exports = async (req,res) => {
         }catch(err){
             return res.status(500).json({
                 success: false,
-                msg: "Usuario no válido"
-            })
+                msg: "Error al buscar usuario"
+            });
+        }
+        if(!user){
+            return res.status(404).json({
+                success: false,
+                msg: "Usuario inválido"
+            });
         }
         const token = getToken({email: user.email, code: user._id});
         var mailOptions = {
@@ -76,7 +82,7 @@ module.exports = async (req,res) => {
         transporter.sendMail(mailOptions, function(error, info){
             if (error) {
             console.log("[Registration] " + error);
-            res.json({
+            res.status(500).json({
                 success: false,
                 msg: "Error al enviar el correo"
             });

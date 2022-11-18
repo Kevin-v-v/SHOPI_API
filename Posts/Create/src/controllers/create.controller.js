@@ -51,9 +51,11 @@ module.exports = async function (req, res){
     }
     let found = null;
     try{
+        if(category){
         found = await Category.findOne({name: category});
+        }
     }catch(err){
-        console.log("Error al encontrar categorias");
+        console.log(err);
     }
     let data = {
         title,
@@ -64,6 +66,8 @@ module.exports = async function (req, res){
     };
     if(found){
         data.category = category;
+    }else{
+        data.category = "Ninguna";
     }
     
     let post = Post(data);
@@ -75,7 +79,7 @@ module.exports = async function (req, res){
         })
     }catch(err){
         console.log(err);
-        res.send({
+        res.status(500).send({
             success: false,
             msg: "No se pudo guardar la publicación"
         });

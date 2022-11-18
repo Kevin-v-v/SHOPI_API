@@ -12,14 +12,14 @@ module.exports = async function(req,res){
                 admin = true
             }
         }else{
-            return res.json({
+            return res.status(500).json({
                 success: false,
                 msg: "Usuario no válido"
             });
         }
     }catch(err){
         console.log(err);
-        return res.json({
+        return res.status(500).json({
             success: false,
             msg: "El usuario no pudo ser validado"
         });
@@ -51,7 +51,7 @@ module.exports = async function(req,res){
         const result = await post.save();
         return res.json({
             success: true,
-            msg: "Se realizó el cambio satisfactoriamente"
+            msg: "Se realizó la eliminación satisfactoriamente"
         });
 
     }else{
@@ -62,7 +62,7 @@ module.exports = async function(req,res){
     }
     }catch(err){
         console.log(err);
-        res.json({
+        res.status(500).json({
             success: false,
             msg: "Error al recuperar la publicación o guardarla"
         });

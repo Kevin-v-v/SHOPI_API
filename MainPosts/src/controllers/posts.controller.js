@@ -43,7 +43,7 @@ module.exports = {
 
             }catch(err){
             console.log(err);
-            res.json({
+            res.status(500).json({
                 success: false,
                 msg: "Error al buscar publicaciones"
             });
@@ -65,15 +65,18 @@ module.exports = {
                     if(!user){
                         continue;
                     }
-                    result.data.push({
+                    let data = {
                         id: post._id,
                         title: post.title,
                         description: post.description,
+                        user_username: user.username,
                         user_name : user.name,
                         user_last_name: user.last_name,
                         image: post.image,
+                        category: post.category,
                         whatsapp_url : `https://wa.me/+521${user.phone}`
-                    });
+                    }
+                    result.data.push(data);
                 }catch(err){
                     console.log(err);
                 }
@@ -104,6 +107,7 @@ module.exports = {
                             user_name : user.name,
                             user_last_name: user.last_name,
                             image: post.image,
+                            category: post.category,
                             whatsapp_url : `https://wa.me/+521${user.phone}`
                         }
                     });

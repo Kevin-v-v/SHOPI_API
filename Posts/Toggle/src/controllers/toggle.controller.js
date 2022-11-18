@@ -41,10 +41,10 @@ module.exports = async function(req,res){
     }
     }catch(err){
         console.log(err);
-        res.json({
+        res.status(500).json({
             success: false,
             msg: "Error al recuperar la publicación o guardarla"
-        })
+        });
     }
 
 }
