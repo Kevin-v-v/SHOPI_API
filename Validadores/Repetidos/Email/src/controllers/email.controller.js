@@ -4,7 +4,7 @@ module.exports = async (req,res) => {
     const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9]+(\.[a-zA-Z0-9]+){1,2}$/
     let email = req.query.email;
     if(regex.test(email)){
-        
+
         let user = await User.findOne({ email }) || null;
         if(user !== null){
             return res.json({
@@ -19,7 +19,7 @@ module.exports = async (req,res) => {
                 alreadyExist: false
             })
         }
-        
+
     } else{
         return res.json({
             success: false,
@@ -27,5 +27,5 @@ module.exports = async (req,res) => {
             alreadyExist: false
         })
     }
-    
+
 }
