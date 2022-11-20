@@ -1,7 +1,8 @@
 const User = require('../models/User.model');
 const axios = require('axios').default || require('axios');
 const bcrypt = require('bcrypt');
-
+const FormData = require('form-data');
+const fs = require('fs');
 ///^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&#.$($)$-$_])[A-Za-z\d$@$!%*?&#.$($)$-$_]{8,15}$/
 ///^(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[A-Z])(?=.*[a-z])\S{8,16}$/gm;
 
@@ -36,6 +37,28 @@ module.exports = {
         }catch(err){
             console.log("Couldn't hash" + err);
         }
+
+        const formData = new FormData();
+
+        formData.append('key', process.env.THUMBSNAP_KEY);
+        formData.append('media', fs.createReadStream(req.file.path));
+        const image_response = await axios.post('https://thumbsnap.com/api/upload', formData, {
+            headers: formData.getHeaders()
+        });
+        console.log(image_response);
+        fs.unlink(req.file.path, (err) => {
+            if (err) {
+                console.log(err);
+            }
+            console.log("Image Deleted Successfully");
+        });
+
+        if(!image_response.data.success){
+            return res.status(500).json({
+                success: false,
+                msg: "No se pudo guardar la imagen"
+            });
+        }
         let data = {
             username: req.body.username,
             name: req.body.name,
@@ -45,7 +68,7 @@ module.exports = {
             user_type: 1,
             user_status: 0,
             password_hash: hash,
-            image: req.file.path
+            image: image_response.data.data.media
         }
 
         let user = User(data);
