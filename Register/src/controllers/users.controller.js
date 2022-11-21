@@ -36,6 +36,10 @@ module.exports = {
         // });
         }catch(err){
             console.log("Couldn't hash" + err);
+            return res.status(500).json({
+                success: false,
+                msg: "Error al procesar los datos"
+            })
         }
 
         const formData = new FormData();
@@ -45,7 +49,6 @@ module.exports = {
         const image_response = await axios.post('https://thumbsnap.com/api/upload', formData, {
             headers: formData.getHeaders()
         });
-        console.log(image_response);
         fs.unlink(req.file.path, (err) => {
             if (err) {
                 console.log(err);
@@ -54,6 +57,7 @@ module.exports = {
         });
 
         if(!image_response.data.success){
+            console.log(image_response.data.error.message);
             return res.status(500).json({
                 success: false,
                 msg: "No se pudo guardar la imagen"

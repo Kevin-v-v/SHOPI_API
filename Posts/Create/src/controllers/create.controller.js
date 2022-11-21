@@ -69,7 +69,6 @@ module.exports = async function (req, res){
     const image_response = await axios.post('https://thumbsnap.com/api/upload', formData, {
         headers: formData.getHeaders()
     });
-    console.log(image_response);
     fs.unlink(req.file.path, (err) => {
         if (err) {
             console.log(err);
@@ -78,6 +77,7 @@ module.exports = async function (req, res){
     });
 
     if(!image_response.data.success){
+        console.log(image_response.data.error.message);
         return res.status(500).json({
             success: false,
             msg: "No se pudo guardar la imagen"

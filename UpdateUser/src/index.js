@@ -1,8 +1,10 @@
 const express = require('express');
-const changeMailRoutes = require('./routes/changemail.routes');
+const updateRoutes = require('./routes/update.routes');
 const dotenv = require('dotenv');
 const path = require('path');
 const cors = require('cors');
+const multerInit = require('./config/multer.config');
+
 
 dotenv.config({
     path: path.resolve(__dirname, '../' + process.env.NODE_ENV + '.env')
@@ -15,9 +17,10 @@ var corsOptions = {
 
 require('./config/db.config');
 const app = express();
+
 app.use(cors(corsOptions));
-app.use(express.json());
-app.use(changeMailRoutes);
+app.use(multerInit);
+app.use(updateRoutes);
 
 
 app.listen(process.env.PORT, process.env.HOST,()=>{

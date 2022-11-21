@@ -65,7 +65,6 @@ module.exports = async function(req,res){
         image_response = await axios.post('https://thumbsnap.com/api/upload', formData, {
             headers: formData.getHeaders()
         });
-        console.log(image_response);
         fs.unlink(req.file.path, (err) => {
             if (err) {
                 console.log(err);

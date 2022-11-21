@@ -44,7 +44,7 @@ services:
       - delete-posts
       - toggle-posts
       - update-posts
-      - change-email
+      - update-user
     ports: ["80:8080"]
   database:
     container_name: database
@@ -55,9 +55,9 @@ services:
     container_name: main-posts
     restart: on-failure
     env_file:
-      - ./MainPosts/development.env
+      - ./Posts/MainPosts/development.env
     build:
-      context: ./MainPosts
+      context: ./Posts/MainPosts
     depends_on:
       - database
     expose: ["3040"]
@@ -101,15 +101,15 @@ services:
     build:
       context: ./Posts/Delete
     expose: ["3060"]
-  change-email:
-    container_name: change-email
+  update-user:
+    container_name: update-user
     restart: on-failure
     env_file:
-      - ./Profile-managment/ChangeEmail/development.env
+      - ./UpdateUser/development.env
     depends_on:
       - database
       - emailverification
     build:
-      context: ./Profile-managment/ChangeEmail
+      context: ./UpdateUser
     expose: ["3090"]
     
