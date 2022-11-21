@@ -112,4 +112,14 @@ services:
     build:
       context: ./UpdateUser
     expose: ["3090"]
+  repetidos:
+    container_name: repetidos
+    restart: on-failure
+    env_file:
+      - ./Repetidos/development.env
+    depends_on:
+      - database
+    build:
+      context: ./Repetidos
+    expose: ["3100"]
     
