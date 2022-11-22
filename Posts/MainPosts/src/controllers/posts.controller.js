@@ -135,6 +135,80 @@ module.exports = {
                 msg: "Error al buscar el post"
             });
         }
+    },
+    ownPosts : async function(req,res){
+        const user_id = req.headers['user-id'];
+        let page = 0;
+        let total_count = 0;
+
+        if(!isNaN(req.query.page)){
+            page = req.query.page - 1;
+        } 
+            let posts;
+            let pages = 0;
+            let count = 0;
+        try{
+            
+            count = await Post.countDocuments({user_id, status: {$ne: 0}});
+            
+            if(count > 0){
+                pages = Math.ceil(count/10);
+                if(page > pages){
+                    return res.json({
+                        success: false,
+                        msg: "Página no válida"
+                        });
+                }else{
+                        posts = await Post.find({user_id, status: {$ne: 0}}).skip(page * 10).sort({ _id: -1 }).limit(10)
+                }
+            }else{
+                return res.json({
+                    success: true, 
+                    total_count: count
+                });
+            }
+
+            }catch(err){
+            console.log(err);
+            res.status(500).json({
+                success: false,
+                msg: "Error al buscar publicaciones"
+            });
+            }
+
+            
+            let result = {
+                success: true,
+                page: page + 1,
+                total_pages: pages,
+                document_count: count,
+                data: []
+            };
+
+           for(let post of posts){
+                    
+                try{
+                    let user = await User.findById(post.user_id);
+                    if(!user){
+                        continue;
+                    }
+                    let data = {
+                        id: post._id,
+                        title: post.title,
+                        description: post.description,
+                        user_username: user.username,
+                        user_name : user.name,
+                        user_last_name: user.last_name,
+                        image: post.image,
+                        category: post.category,
+                        whatsapp_url : `https://wa.me/+521${user.phone}`
+                    }
+                    result.data.push(data);
+                }catch(err){
+                    console.log(err);
+                }
+            }
+            res.json(result);
     }
 
 
