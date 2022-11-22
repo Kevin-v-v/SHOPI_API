@@ -25,7 +25,7 @@ module.exports = async function (req,res){
     try{
         user = await User.findOne({username}) || null;
         if(!user){
-            return res.status(500).json({
+            return res.status(404).json({
                 success: false,
                 msg: "El usuario no existe"
             });
