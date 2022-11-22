@@ -24,5 +24,5 @@ app.use(updateRoutes);
 
 
 app.listen(process.env.PORT, process.env.HOST,()=>{
-    console.log('[Change Mail] Server on ' + process.env.HOST + ':' + process.env.PORT);
+    console.log('[Update User] Server on ' + process.env.HOST + ':' + process.env.PORT);
 })

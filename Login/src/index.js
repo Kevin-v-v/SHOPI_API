@@ -1,5 +1,5 @@
 const express = require('express');
-const loginRoutes = require('./routes/login.routes');
+const loginLogoutRoutes = require('./routes/login.logout.routes');
 const authRoutes = require('./routes/auth.routes');
 const app = express();
 const dotenv = require('dotenv');
@@ -34,7 +34,7 @@ app.use(session({
 require('./config/db.config');
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use(loginRoutes);
+app.use(loginLogoutRoutes);
 app.use(authRoutes);
 
 app.listen(process.env.PORT, process.env.HOST, ()=>{

@@ -27,13 +27,6 @@ module.exports = {
         let hash;
         try{
         hash = await getPasswordHash(req.body.password);
-        
-        // getPasswordHash(req.body.password).then((hash)=>{
-        //     console.log(hash);
-        //     this.password_hash = hash;
-        // }).catch(err=>{
-        //     console.log("falló la contraseña hash");
-        // });
         }catch(err){
             console.log("Couldn't hash" + err);
             return res.status(500).json({
@@ -128,3 +121,9 @@ module.exports = {
             //     success: true,
             //     msg: "Correo enviado"
             // });
+                    // getPasswordHash(req.body.password).then((hash)=>{
+        //     console.log(hash);
+        //     this.password_hash = hash;
+        // }).catch(err=>{
+        //     console.log("falló la contraseña hash");
+        // });

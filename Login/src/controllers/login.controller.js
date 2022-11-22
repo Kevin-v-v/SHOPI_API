@@ -17,7 +17,7 @@ module.exports = {
             email
         }).then(function(user){
             if(user){
-                if(user.status == 2){
+                if(user.user_status == 2){
                     return res.send({
                         success: false,
                         msg: "Usuario baneado por mal comportamiento"
