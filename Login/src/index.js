@@ -8,7 +8,6 @@ const session = require('express-session');
 const mongoStore = require('connect-mongo');
 const cors = require('cors');
 
-
 dotenv.config({
     path: path.resolve(__dirname, '../' + process.env.NODE_ENV + '.env')
 });
@@ -27,7 +26,8 @@ app.use(session({
     resave: false,
     rolling: true,
     cookie: {
-        maxAge: 1800000
+        maxAge: 1800000,
+        sameSite: 'none'
     },
     store: mongoStore.create({ mongoUrl: "mongodb://database:27017/SHOPI" })
 }));
