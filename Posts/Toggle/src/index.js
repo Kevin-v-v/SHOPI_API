@@ -3,9 +3,9 @@ const dotenv = require('dotenv');
 const path = require('path');
 const toggleRoutes = require('./routes/toggle.routes');
 const cors = require('cors');
-dotenv.config({
-    path: path.resolve(__dirname, '../' + process.env.NODE_ENV + '.env')
-});
+// dotenv.config({
+//     path: path.resolve(__dirname, '../' + process.env.NODE_ENV + '.env')
+// });
 var corsOptions = {
     origin: '*'
     //optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204

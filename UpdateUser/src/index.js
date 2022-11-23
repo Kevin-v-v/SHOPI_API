@@ -6,9 +6,9 @@ const cors = require('cors');
 const multerInit = require('./config/multer.config');
 
 
-dotenv.config({
-    path: path.resolve(__dirname, '../' + process.env.NODE_ENV + '.env')
-});
+// dotenv.config({
+//     path: path.resolve(__dirname, '../' + process.env.NODE_ENV + '.env')
+// });
 
 var corsOptions = {
     origin: '*'

@@ -6,6 +6,7 @@ services:
       - ./Login/development.env
     build:
       context: ./Login
+    image: shoppiapi.azurecr.io/login
     depends_on:
       - database
     expose: ["3030"]
@@ -16,6 +17,7 @@ services:
       - ./Register/development.env
     build:
       context: ./Register
+    image: shoppiapi.azurecr.io/register
     depends_on:
       - database
       - emailverification
@@ -27,6 +29,7 @@ services:
       - ./EmailVerification/development.env
     build:
       context: ./EmailVerification
+    image: shoppiapi.azurecr.io/emailverification
     depends_on:
       - database
     expose: ["3010"] 
@@ -35,6 +38,7 @@ services:
     restart: on-failure
     build:
       context: ./Orquestador
+    image: shoppiapi.azurecr.io/orquestador
     depends_on:
       - login
       - register
@@ -45,7 +49,7 @@ services:
       - toggle-posts
       - update-posts
       - update-user
-    ports: ["80:8080"]
+    ports: ["80:80"]
   database:
     container_name: database
     restart: on-failure
@@ -58,6 +62,7 @@ services:
       - ./Posts/MainPosts/development.env
     build:
       context: ./Posts/MainPosts
+    image: shoppiapi.azurecr.io/main-posts
     depends_on:
       - database
     expose: ["3040"]
@@ -70,6 +75,7 @@ services:
       - database
     build:
       context: ./Posts/Create
+    image: shoppiapi.azurecr.io/create-posts
     expose: ["3050"]
   toggle-posts:
     container_name: toggle-posts
@@ -80,6 +86,7 @@ services:
       - database
     build:
       context: ./Posts/Toggle
+    image: shoppiapi.azurecr.io/toggle-posts
     expose: ["3080"]
   update-posts:
     container_name: update-posts
@@ -90,6 +97,7 @@ services:
       - database
     build:
       context: ./Posts/Update
+    image: shoppiapi.azurecr.io/update-posts
     expose: ["3070"]
   delete-posts:
     container_name: delete-posts
@@ -100,6 +108,7 @@ services:
       - database
     build:
       context: ./Posts/Delete
+    image: shoppiapi.azurecr.io/delete-posts
     expose: ["3060"]
   update-user:
     container_name: update-user
@@ -111,6 +120,7 @@ services:
       - emailverification
     build:
       context: ./UpdateUser
+    image: shoppiapi.azurecr.io/update-user
     expose: ["3090"]
   repetidos:
     container_name: repetidos
@@ -121,5 +131,6 @@ services:
       - database
     build:
       context: ./Repetidos
+    image: shoppiapi.azurecr.io/repetidos
     expose: ["3100"]
     
