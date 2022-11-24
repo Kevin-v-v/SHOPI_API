@@ -19,15 +19,17 @@ var corsOptions = {
   }
 
 
-
+app.set('trust proxy', 1);
 app.use(session({
+    proxy: true,
     secret: [process.env.SECRET_KEY_1, process.env.SECRET_KEY_2],
     saveUninitialized: false,
     resave: false,
     rolling: true,
     cookie: {
         maxAge: 1800000,
-        sameSite: 'none'
+        sameSite: 'none',
+        secure: true
     },
     store: mongoStore.create({ mongoUrl: "mongodb://database:27017/SHOPI" })
 }));

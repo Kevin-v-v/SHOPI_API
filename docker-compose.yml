@@ -45,7 +45,7 @@ services:
       - toggle-posts
       - update-posts
       - update-user
-    ports: ["80:8080"]
+    ports: ["444:443"]
   database:
     container_name: database
     restart: on-failure
