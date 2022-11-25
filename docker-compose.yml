@@ -43,73 +43,74 @@ services:
       - login
       - register
       - emailverification
-      - main-posts
-      - create-posts
-      - delete-posts
-      - toggle-posts
-      - update-posts
-      - update-user
-    ports: ["80:80"]
+      - posts
+    ports: ["444:443"]
   database:
     container_name: database
     restart: on-failure
     image: mongo:4.4.6
     expose: ["27017"]
-  main-posts:
-    container_name: main-posts
+  # main-posts:
+  #   container_name: main-posts
+  #   restart: on-failure
+  #   env_file:
+  #     - ./Posts/MainPosts/development.env
+  #   build:
+  #     context: ./Posts/MainPosts
+  #   depends_on:
+  #     - database
+  #   expose: ["3040"]
+  # create-posts:
+  #   container_name: create-posts
+  #   restart: on-failure
+  #   env_file:
+  #     - ./Posts/Create/development.env
+  #   depends_on:
+  #     - database
+  #   build:
+  #     context: ./Posts/Create
+  #   expose: ["3050"]
+  # toggle-posts:
+  #   container_name: toggle-posts
+  #   restart: on-failure
+  #   env_file:
+  #     - ./Posts/Toggle/development.env
+  #   depends_on:
+  #     - database
+  #   build:
+  #     context: ./Posts/Toggle
+  #   expose: ["3080"]
+  # update-posts:
+  #   container_name: update-posts
+  #   restart: on-failure
+  #   env_file:
+  #     - ./Posts/Update/development.env
+  #   depends_on:
+  #     - database
+  #   build:
+  #     context: ./Posts/Update
+  #   expose: ["3070"]
+  # delete-posts:
+  #   container_name: delete-posts
+  #   restart: on-failure
+  #   env_file:
+  #     - ./Posts/Delete/development.env
+  #   depends_on:
+  #     - database
+  #   build:
+  #     context: ./Posts/Delete
+  #   expose: ["3060"]
+
+  posts:
+    container_name: posts
     restart: on-failure
     env_file:
-      - ./Posts/MainPosts/development.env
+      - ./PostsAll/development.env
     build:
-      context: ./Posts/MainPosts
-    image: shoppiapi.azurecr.io/main-posts
+      context: ./PostsAll
     depends_on:
       - database
     expose: ["3040"]
-  create-posts:
-    container_name: create-posts
-    restart: on-failure
-    env_file:
-      - ./Posts/Create/development.env
-    depends_on:
-      - database
-    build:
-      context: ./Posts/Create
-    image: shoppiapi.azurecr.io/create-posts
-    expose: ["3050"]
-  toggle-posts:
-    container_name: toggle-posts
-    restart: on-failure
-    env_file:
-      - ./Posts/Toggle/development.env
-    depends_on:
-      - database
-    build:
-      context: ./Posts/Toggle
-    image: shoppiapi.azurecr.io/toggle-posts
-    expose: ["3080"]
-  update-posts:
-    container_name: update-posts
-    restart: on-failure
-    env_file:
-      - ./Posts/Update/development.env
-    depends_on:
-      - database
-    build:
-      context: ./Posts/Update
-    image: shoppiapi.azurecr.io/update-posts
-    expose: ["3070"]
-  delete-posts:
-    container_name: delete-posts
-    restart: on-failure
-    env_file:
-      - ./Posts/Delete/development.env
-    depends_on:
-      - database
-    build:
-      context: ./Posts/Delete
-    image: shoppiapi.azurecr.io/delete-posts
-    expose: ["3060"]
   update-user:
     container_name: update-user
     restart: on-failure

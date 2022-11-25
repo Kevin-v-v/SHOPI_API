@@ -1,15 +1,20 @@
 const express = require('express');
 const createRoutes = require('./routes/create.routes');
-const multerInit = require('./config/multer.config');
+const deleteRoutes = require('./routes/delete.routes');
+const updateRoutes = require('./routes/update.routes');
+const toggleRoutes = require('./routes/toggle.routes');
+const mainRoutes = require('./routes/posts.routes');
+const mongoose = require('mongoose');
+
+// const multerInit = require('./config/multer.config');
 const path = require('path');
 const dotenv = require('dotenv');
 const cors = require('cors');
 
+// dotenv.config({
+//     path: path.resolve(__dirname, '../' + process.env.NODE_ENV + '.env')
+// });
 
-
-dotenv.config({
-    path: path.resolve(__dirname, '../' + process.env.NODE_ENV + '.env')
-});
 var corsOptions = {
     origin: 'http://localhost:4200',
     credentials: true
@@ -20,12 +25,19 @@ const db_connection = require('./config/db.config');
 db_connection();
 const app = express();
 app.use(cors(corsOptions));
-app.use(multerInit);
+// app.use(multerInit);
 app.use(createRoutes);
+app.use(deleteRoutes);
+app.use(updateRoutes);
+app.use(mainRoutes);
+app.use(toggleRoutes);
 
+// mongoose.connection.on('disconnected', () => {
+//     db_connection();
+// });
 
 app.listen(process.env.PORT, process.env.HOST, ()=>{
-    console.log('[Posts Create] Server on ' + process.env.HOST + ":" + process.env.PORT);
+    console.log('[Posts] Server on ' + process.env.HOST + ":" + process.env.PORT);
 });
 
 
