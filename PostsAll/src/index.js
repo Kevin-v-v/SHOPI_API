@@ -32,9 +32,9 @@ app.use(updateRoutes);
 app.use(mainRoutes);
 app.use(toggleRoutes);
 
-mongoose.connection.on('disconnected', () => {
-    db_connection();
-});
+// mongoose.connection.on('disconnected', () => {
+//     db_connection();
+// });
 
 app.listen(process.env.PORT, process.env.HOST, ()=>{
     console.log('[Posts] Server on ' + process.env.HOST + ":" + process.env.PORT);

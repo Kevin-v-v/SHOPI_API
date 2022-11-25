@@ -75,8 +75,8 @@ module.exports = async function (req, res){
         }
         console.log("Image Locally Deleted Successfully");
     });
-    let answer = JSON.parse(image_response);
-    console.log(answer)
+    // let answer = JSON.parse(image_response);
+    // console.log(answer)
     if(!image_response.data.success){
         console.log("Error al subir la imagen: " + image_response);
         //console.log(image_response.data.error.message);
