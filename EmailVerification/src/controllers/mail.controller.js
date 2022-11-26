@@ -69,7 +69,7 @@ module.exports = async (req,res) => {
             subject: 'Verifica tu correo electrónico, SHOPI',
             template: 'index',
             context: {
-                url: `http://${process.env.GATEWAY_HOST}:${process.env.GATEWAY_PORT}/api/verify/${token}`,
+                url: `https://${process.env.GATEWAY_HOST}:${process.env.GATEWAY_PORT}/api/verify/${token}`,
                 name: user.name
             }
                 

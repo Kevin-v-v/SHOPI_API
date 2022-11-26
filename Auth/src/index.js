@@ -32,7 +32,7 @@ app.use(session({
         sameSite: 'none',
         secure: true
     },
-    store: mongoStore.create({ mongoUrl: "mongodb://database:27017/SHOPI" })
+    store: mongoStore.create({ mongoUrl: process.env.DB_CONNECTION_STRING })
 }));
 
 require('./config/db.config');

@@ -2,7 +2,7 @@ const {connect} = require('mongoose');
 const Category = require('../models/Category.model');
 
 module.exports = async function(){
-    connect(`mongodb://database:27017/SHOPI`).then(async db=>{
+    connect(process.env.DB_CONNECTION_STRING).then(async db=>{
     console.log('[Posts Create] Database connected to', db.connection.name);
     try{
         const total = await Category.countDocuments()
