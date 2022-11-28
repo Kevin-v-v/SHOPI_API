@@ -1,0 +1,603 @@
+server {
+  listen 443 ssl;
+  ssl_certificate /etc/nginx/ssl/cert.pem;
+  ssl_certificate_key /etc/nginx/ssl/key.pem;
+  #add_header Access-Control-Allow-Origin *;
+  location /api/auth {
+        #internal;
+        if ($request_method = 'OPTIONS') {
+
+        add_header 'Access-Control-Allow-Origin' "$http_origin" always;
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, PATCH, PUT, DELETE, OPTIONS' always;
+        add_header 'Access-Control-Allow-Headers' 'Content-Type, Accept, Authorization' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+
+        add_header Access-Control-Max-Age 1728000;
+        add_header Content-Type 'text/plain charset=UTF-8';
+        add_header Content-Length 0;
+        return 204;
+        }
+        proxy_pass        http://${AUTH_HOST}:3030/api/auth;
+        proxy_redirect    off;
+        proxy_set_header  Host $host;
+        proxy_set_header  X-Real-IP $remote_addr;
+        proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header  X-Forwarded-Host $server_name;
+        proxy_set_header  Content-Length "";
+        proxy_pass_request_body off;
+    }
+    location /api/logout {
+        #internal;
+        if ($request_method = 'OPTIONS') {
+
+        add_header 'Access-Control-Allow-Origin' "$http_origin" always;
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, PATCH, PUT, DELETE, OPTIONS' always;
+        add_header 'Access-Control-Allow-Headers' 'Content-Type, Accept, Authorization' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+
+        add_header Access-Control-Max-Age 1728000;
+        add_header Content-Type 'text/plain charset=UTF-8';
+        add_header Content-Length 0;
+        return 204;
+        }
+        proxy_pass        http://${AUTH_HOST}:3030/api/logout;
+        proxy_redirect    off;
+        proxy_set_header  Host $host;
+        proxy_set_header  X-Real-IP $remote_addr;
+        proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header  X-Forwarded-Host $server_name;
+        proxy_set_header  Content-Length "";
+        proxy_pass_request_body off;
+    }
+    location /api/verify {
+        #internal;
+        #auth_request /api/auth;
+        #auth_request_set $user_id $sent_http_user_id;
+
+        if ($request_method = 'OPTIONS') {
+
+        add_header 'Access-Control-Allow-Origin' "$http_origin" always;
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, PATCH, PUT, DELETE, OPTIONS' always;
+        add_header 'Access-Control-Allow-Headers' 'Content-Type, Accept, Authorization' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+
+        add_header Access-Control-Max-Age 1728000;
+        add_header Content-Type 'text/plain charset=UTF-8';
+        add_header Content-Length 0;
+        return 204;
+        }
+        proxy_pass        http://${EV_HOST}:3010/api/verify;
+        proxy_redirect    off;
+        proxy_set_header  Host $host;
+        proxy_set_header  X-Real-IP $remote_addr;
+        proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header  X-Forwarded-Host $server_name;
+        proxy_set_header  Content-Length "";
+        proxy_pass_request_body off;
+        #proxy_set_header  User-Id $user_id;
+        
+    }
+    location /api/sendmail {
+        #internal;
+        if ($request_method = 'OPTIONS') {
+
+        add_header 'Access-Control-Allow-Origin' "$http_origin" always;
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, PATCH, PUT, DELETE, OPTIONS' always;
+        add_header 'Access-Control-Allow-Headers' 'Content-Type, Accept, Authorization' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+
+        add_header Access-Control-Max-Age 1728000;
+        add_header Content-Type 'text/plain charset=UTF-8';
+        add_header Content-Length 0;
+        return 204;
+        }
+
+        auth_request /api/auth;
+        auth_request_set $user_id $sent_http_user_id;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_pass        http://${EV_HOST}:3010/api/sendmail;
+        proxy_redirect    off;
+        proxy_set_header  Host $host;
+        proxy_set_header  X-Real-IP $remote_addr;
+        proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header  X-Forwarded-Host $server_name;
+        proxy_set_header  Content-Length "";
+        proxy_pass_request_body off;
+        proxy_set_header  User-Id $user_id;
+    }
+    location /api/login {
+        rewrite ^/api/login/(.*) /$1 break;
+        
+        if ($request_method = 'OPTIONS') {
+
+        add_header 'Access-Control-Allow-Origin' "$http_origin" always;
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, PATCH, PUT, DELETE, OPTIONS' always;
+        add_header 'Access-Control-Allow-Headers' 'Content-Type, Accept, Authorization' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+
+        add_header Access-Control-Max-Age 1728000;
+        add_header Content-Type 'text/plain charset=UTF-8';
+        add_header Content-Length 0;
+        return 204;
+        }
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_pass        http://${AUTH_HOST}:3030;
+        proxy_redirect    off;
+        proxy_set_header  Host $host;
+        proxy_set_header  X-Real-IP $remote_addr;
+        proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header  X-Forwarded-Host $server_name;
+
+        #proxy_set_header Access-Control-Allow-Origin *;
+        #proxy_set_header Host $host;
+        #proxy_set_header Access-Control-Max-Age 3600;
+        #proxy_set_header Access-Control-Expose-Headers Content-Length;
+        #proxy_set_header Access-Control-Allow-Headers Range;
+    }
+
+    location /api/register {
+        #rewrite ^/register/(.*) /$1 break;
+        if ($request_method = 'OPTIONS') {
+
+        add_header 'Access-Control-Allow-Origin' "$http_origin" always;
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, PATCH, PUT, DELETE, OPTIONS' always;
+        add_header 'Access-Control-Allow-Headers' 'Content-Type, Accept, Authorization' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+
+        add_header Access-Control-Max-Age 1728000;
+        add_header Content-Type 'text/plain charset=UTF-8';
+        add_header Content-Length 0;
+        return 204;
+        }
+        proxy_pass        http://${AUTH_HOST}:3030/api/user/add;
+        proxy_redirect    off;
+        proxy_set_header  Host $host;
+        proxy_set_header  X-Real-IP $remote_addr;
+        proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header  X-Forwarded-Host $server_name;
+    }
+    location /api/posts/get/ {
+        #rewrite ^/register/(.*) /$1 break;
+        if ($request_method = 'OPTIONS') {
+
+        add_header 'Access-Control-Allow-Origin' "$http_origin" always;
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, PATCH, PUT, DELETE, OPTIONS' always;
+        add_header 'Access-Control-Allow-Headers' 'Content-Type, Accept, Authorization' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+
+        add_header Access-Control-Max-Age 1728000;
+        add_header Content-Type 'text/plain charset=UTF-8';
+        add_header Content-Length 0;
+        return 204;
+        }
+        proxy_pass        http://${POSTS_HOST}:3040/api/posts/get/;
+        proxy_redirect    off;
+        proxy_set_header  Host $host;
+        proxy_set_header  X-Real-IP $remote_addr;
+        proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header  X-Forwarded-Host $server_name;
+    }
+    location /api/posts/getown {
+        #rewrite ^/register/(.*) /$1 break;
+        if ($request_method = 'OPTIONS') {
+
+        add_header 'Access-Control-Allow-Origin' "$http_origin" always;
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, PATCH, PUT, DELETE, OPTIONS' always;
+        add_header 'Access-Control-Allow-Headers' 'Content-Type, Accept, Authorization' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+
+        add_header Access-Control-Max-Age 1728000;
+        add_header Content-Type 'text/plain charset=UTF-8';
+        add_header Content-Length 0;
+        return 204;
+        }
+        auth_request /api/auth;
+        auth_request_set $user_id $sent_http_user_id;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_pass        http://${POSTS_HOST}:3040/api/posts/getown/;
+        proxy_redirect    off;
+        proxy_set_header  Host $host;
+        proxy_set_header  X-Real-IP $remote_addr;
+        proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header  X-Forwarded-Host $server_name;
+        proxy_set_header  User-Id $user_id;        
+    }
+    
+    location /api/posts/get {
+        #rewrite ^/register/(.*) /$1 break;
+        if ($request_method = 'OPTIONS') {
+
+        add_header 'Access-Control-Allow-Origin' "$http_origin" always;
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, PATCH, PUT, DELETE, OPTIONS' always;
+        add_header 'Access-Control-Allow-Headers' 'Content-Type, Accept, Authorization' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+
+        add_header Access-Control-Max-Age 1728000;
+        add_header Content-Type 'text/plain charset=UTF-8';
+        add_header Content-Length 0;
+        return 204;
+        }
+
+        proxy_pass        http://${POSTS_HOST}:3040/api/posts/get;
+        proxy_redirect    off;
+        proxy_set_header  Host $host;
+        proxy_set_header  X-Real-IP $remote_addr;
+        proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header  X-Forwarded-Host $server_name;
+    }
+    location /api/categories {
+        #rewrite ^/register/(.*) /$1 break;
+        if ($request_method = 'OPTIONS') {
+
+        add_header 'Access-Control-Allow-Origin' "$http_origin" always;
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, PATCH, PUT, DELETE, OPTIONS' always;
+        add_header 'Access-Control-Allow-Headers' 'Content-Type, Accept, Authorization' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+
+        add_header Access-Control-Max-Age 1728000;
+        add_header Content-Type 'text/plain charset=UTF-8';
+        add_header Content-Length 0;
+        return 204;
+        }
+
+        proxy_pass        http://${POSTS_HOST}:3040/api/categories;
+        proxy_redirect    off;
+        proxy_set_header  Host $host;
+        proxy_set_header  X-Real-IP $remote_addr;
+        proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header  X-Forwarded-Host $server_name;
+    }
+    location /api/posts/create {
+    if ($request_method = 'OPTIONS') {
+
+        add_header 'Access-Control-Allow-Origin' "$http_origin" always;
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, PATCH, PUT, DELETE, OPTIONS' always;
+        add_header 'Access-Control-Allow-Headers' 'Content-Type, Accept, Authorization' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+
+        add_header Access-Control-Max-Age 1728000;
+        add_header Content-Type 'text/plain charset=UTF-8';
+        add_header Content-Length 0;
+        return 204;
+        }
+    auth_request /api/auth;
+    auth_request_set $user_id $sent_http_user_id;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    rewrite ^/api/posts/create/(.*) /$1 break;
+
+    proxy_pass        http://${POSTS_HOST}:3040;
+    proxy_redirect    off;
+    proxy_set_header  Host $host;
+    proxy_set_header  X-Real-IP $remote_addr;
+    proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header  X-Forwarded-Host $server_name;
+    proxy_set_header  User-Id $user_id;
+  }
+
+    location /api/posts/update {
+    if ($request_method = 'OPTIONS') {
+
+        add_header 'Access-Control-Allow-Origin' "$http_origin" always;
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, PATCH, PUT, DELETE, OPTIONS' always;
+        add_header 'Access-Control-Allow-Headers' 'Content-Type, Accept, Authorization' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+
+        add_header Access-Control-Max-Age 1728000;
+        add_header Content-Type 'text/plain charset=UTF-8';
+        add_header Content-Length 0;
+        return 204;
+        }
+    auth_request /api/auth;
+    auth_request_set $user_id $sent_http_user_id;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    rewrite ^/api/posts/update/(.*) /$1 break;
+
+    proxy_pass        http://${POSTS_HOST}:3040;
+    proxy_redirect    off;
+    proxy_set_header  Host $host;
+    proxy_set_header  X-Real-IP $remote_addr;
+    proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header  X-Forwarded-Host $server_name;
+    proxy_set_header  User-Id $user_id;
+  }
+
+  location /api/posts/toggle {
+    if ($request_method = 'OPTIONS') {
+
+        add_header 'Access-Control-Allow-Origin' "$http_origin" always;
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, PATCH, PUT, DELETE, OPTIONS' always;
+        add_header 'Access-Control-Allow-Headers' 'Content-Type, Accept, Authorization' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+
+        add_header Access-Control-Max-Age 1728000;
+        add_header Content-Type 'text/plain charset=UTF-8';
+        add_header Content-Length 0;
+        return 204;
+        }
+    auth_request /api/auth;
+    auth_request_set $user_id $sent_http_user_id;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    rewrite ^/api/posts/toggle/(.*) /$1 break;
+
+    proxy_pass        http://${POSTS_HOST}:3040;
+    proxy_redirect    off;
+    proxy_set_header  Host $host;
+    proxy_set_header  X-Real-IP $remote_addr;
+    proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header  X-Forwarded-Host $server_name;
+    proxy_set_header  User-Id $user_id;
+  }
+
+  location /api/posts/delete {
+    if ($request_method = 'OPTIONS') {
+
+        add_header 'Access-Control-Allow-Origin' "$http_origin" always;
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, PATCH, PUT, DELETE, OPTIONS' always;
+        add_header 'Access-Control-Allow-Headers' 'Content-Type, Accept, Authorization' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+
+        add_header Access-Control-Max-Age 1728000;
+        add_header Content-Type 'text/plain charset=UTF-8';
+        add_header Content-Length 0;
+        return 204;
+        }
+    auth_request /api/auth;
+    auth_request_set $user_id $sent_http_user_id;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    rewrite ^/api/posts/delete/(.*) /$1 break;
+
+    proxy_pass        http://${POSTS_HOST}:3040;
+    proxy_redirect    off;
+    proxy_set_header  Host $host;
+    proxy_set_header  X-Real-IP $remote_addr;
+    proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header  X-Forwarded-Host $server_name;
+    proxy_set_header  User-Id $user_id;
+  }
+
+  location /api/user/update/email {
+    if ($request_method = 'OPTIONS') {
+
+        add_header 'Access-Control-Allow-Origin' "$http_origin" always;
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, PATCH, PUT, DELETE, OPTIONS' always;
+        add_header 'Access-Control-Allow-Headers' 'Content-Type, Accept, Authorization' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+
+        add_header Access-Control-Max-Age 1728000;
+        add_header Content-Type 'text/plain charset=UTF-8';
+        add_header Content-Length 0;
+        return 204;
+        }
+    auth_request /api/auth;
+    auth_request_set $user_id $sent_http_user_id;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    rewrite ^/api/user/update/email/(.*) /$1 break;
+
+    proxy_pass        http://${UPDATE_USER_HOST}:3090;
+    proxy_redirect    off;
+    proxy_set_header  Host $host;
+    proxy_set_header  X-Real-IP $remote_addr;
+    proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header  X-Forwarded-Host $server_name;
+    proxy_set_header  User-Id $user_id;
+  }
+
+  location /api/user/update/phone {
+    if ($request_method = 'OPTIONS') {
+
+        add_header 'Access-Control-Allow-Origin' "$http_origin" always;
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, PATCH, PUT, DELETE, OPTIONS' always;
+        add_header 'Access-Control-Allow-Headers' 'Content-Type, Accept, Authorization' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+
+        add_header Access-Control-Max-Age 1728000;
+        add_header Content-Type 'text/plain charset=UTF-8';
+        add_header Content-Length 0;
+        return 204;
+        }
+    auth_request /api/auth;
+    auth_request_set $user_id $sent_http_user_id;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    rewrite ^/api/user/update/phone/(.*) /$1 break;
+
+    proxy_pass        http://${UPDATE_USER_HOST}:3090;
+    proxy_redirect    off;
+    proxy_set_header  Host $host;
+    proxy_set_header  X-Real-IP $remote_addr;
+    proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header  X-Forwarded-Host $server_name;
+    proxy_set_header  User-Id $user_id;
+  }
+
+  location /api/user/update/password {
+    if ($request_method = 'OPTIONS') {
+
+        add_header 'Access-Control-Allow-Origin' "$http_origin" always;
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, PATCH, PUT, DELETE, OPTIONS' always;
+        add_header 'Access-Control-Allow-Headers' 'Content-Type, Accept, Authorization' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+
+        add_header Access-Control-Max-Age 1728000;
+        add_header Content-Type 'text/plain charset=UTF-8';
+        add_header Content-Length 0;
+        return 204;
+        }
+    auth_request /api/auth;
+    auth_request_set $user_id $sent_http_user_id;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    rewrite ^/api/user/update/password/(.*) /$1 break;
+
+    proxy_pass        http://${UPDATE_USER_HOST}:3090;
+    proxy_redirect    off;
+    proxy_set_header  Host $host;
+    proxy_set_header  X-Real-IP $remote_addr;
+    proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header  X-Forwarded-Host $server_name;
+    proxy_set_header  User-Id $user_id;
+  }
+
+  location /api/user/update/picture {
+    if ($request_method = 'OPTIONS') {
+
+        add_header 'Access-Control-Allow-Origin' "$http_origin" always;
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, PATCH, PUT, DELETE, OPTIONS' always;
+        add_header 'Access-Control-Allow-Headers' 'Content-Type, Accept, Authorization' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+
+        add_header Access-Control-Max-Age 1728000;
+        add_header Content-Type 'text/plain charset=UTF-8';
+        add_header Content-Length 0;
+        return 204;
+        }
+    auth_request /api/auth;
+    auth_request_set $user_id $sent_http_user_id;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    rewrite ^/api/user/update/picture/(.*) /$1 break;
+
+    proxy_pass        http://${UPDATE_USER_HOST}:3090;
+    proxy_redirect    off;
+    proxy_set_header  Host $host;
+    proxy_set_header  X-Real-IP $remote_addr;
+    proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header  X-Forwarded-Host $server_name;
+    proxy_set_header  User-Id $user_id;
+  }
+  location /api/user/update/username {
+    if ($request_method = 'OPTIONS') {
+
+        add_header 'Access-Control-Allow-Origin' "$http_origin" always;
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, PATCH, PUT, DELETE, OPTIONS' always;
+        add_header 'Access-Control-Allow-Headers' 'Content-Type, Accept, Authorization' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+
+        add_header Access-Control-Max-Age 1728000;
+        add_header Content-Type 'text/plain charset=UTF-8';
+        add_header Content-Length 0;
+        return 204;
+        }
+    auth_request /api/auth;
+    auth_request_set $user_id $sent_http_user_id;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    rewrite ^/api/user/update/username/(.*) /$1 break;
+
+    proxy_pass        http://${UPDATE_USER_HOST}:3090;
+    proxy_redirect    off;
+    proxy_set_header  Host $host;
+    proxy_set_header  X-Real-IP $remote_addr;
+    proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header  X-Forwarded-Host $server_name;
+    proxy_set_header  User-Id $user_id;
+  }
+  location /api/user/delete {
+    if ($request_method = 'OPTIONS') {
+
+        add_header 'Access-Control-Allow-Origin' "$http_origin" always;
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, PATCH, PUT, DELETE, OPTIONS' always;
+        add_header 'Access-Control-Allow-Headers' 'Content-Type, Accept, Authorization' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+
+        add_header Access-Control-Max-Age 1728000;
+        add_header Content-Type 'text/plain charset=UTF-8';
+        add_header Content-Length 0;
+        return 204;
+        }
+    auth_request /api/auth;
+    auth_request_set $user_id $sent_http_user_id;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    rewrite ^/api/user/delete/(.*) /$1 break;
+
+    proxy_pass        http://${UPDATE_USER_HOST}:3090;
+    proxy_redirect    off;
+    proxy_set_header  Host $host;
+    proxy_set_header  X-Real-IP $remote_addr;
+    proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header  X-Forwarded-Host $server_name;
+    proxy_set_header  User-Id $user_id;
+  }
+  
+  location /api/repetidos/email {
+    if ($request_method = 'OPTIONS') {
+
+        add_header 'Access-Control-Allow-Origin' "$http_origin" always;
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, PATCH, PUT, DELETE, OPTIONS' always;
+        add_header 'Access-Control-Allow-Headers' 'Content-Type, Accept, Authorization' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+
+        add_header Access-Control-Max-Age 1728000;
+        add_header Content-Type 'text/plain charset=UTF-8';
+        add_header Content-Length 0;
+        return 204;
+        }
+    proxy_pass        http://${REPETIDOS_HOST}:3100/api/repetidos/email;
+    proxy_redirect    off;
+    proxy_set_header  Host $host;
+    proxy_set_header  X-Real-IP $remote_addr;
+    proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header  X-Forwarded-Host $server_name;
+    }
+  location /api/repetidos/phone {
+    if ($request_method = 'OPTIONS') {
+
+        add_header 'Access-Control-Allow-Origin' "$http_origin" always;
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, PATCH, PUT, DELETE, OPTIONS' always;
+        add_header 'Access-Control-Allow-Headers' 'Content-Type, Accept, Authorization' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+
+        add_header Access-Control-Max-Age 1728000;
+        add_header Content-Type 'text/plain charset=UTF-8';
+        add_header Content-Length 0;
+        return 204;
+        }
+    proxy_pass        http://${REPETIDOS_HOST}:3100/api/repetidos/phone;
+    proxy_redirect    off;
+    proxy_set_header  Host $host;
+    proxy_set_header  X-Real-IP $remote_addr;
+    proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header  X-Forwarded-Host $server_name;
+    }
+  location /api/repetidos/username {
+    if ($request_method = 'OPTIONS') {
+
+        add_header 'Access-Control-Allow-Origin' "$http_origin" always;
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, PATCH, PUT, DELETE, OPTIONS' always;
+        add_header 'Access-Control-Allow-Headers' 'Content-Type, Accept, Authorization' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+
+        add_header Access-Control-Max-Age 1728000;
+        add_header Content-Type 'text/plain charset=UTF-8';
+        add_header Content-Length 0;
+        return 204;
+        }
+    proxy_pass        http://${REPETIDOS_HOST}:3100/api/repetidos/username;
+    proxy_redirect    off;
+    proxy_set_header  Host $host;
+    proxy_set_header  X-Real-IP $remote_addr;
+    proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header  X-Forwarded-Host $server_name;
+    }
+  location /api/repetidos/post {
+    if ($request_method = 'OPTIONS') {
+
+        add_header 'Access-Control-Allow-Origin' "$http_origin" always;
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, PATCH, PUT, DELETE, OPTIONS' always;
+        add_header 'Access-Control-Allow-Headers' 'Content-Type, Accept, Authorization' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+
+        add_header Access-Control-Max-Age 1728000;
+        add_header Content-Type 'text/plain charset=UTF-8';
+        add_header Content-Length 0;
+        return 204;
+        }
+    auth_request /api/auth;
+    auth_request_set $user_id $sent_http_user_id;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_pass        http://${REPETIDOS_HOST}:3100/api/repetidos/post;
+    proxy_redirect    off;
+    proxy_set_header  Host $host;
+    proxy_set_header  X-Real-IP $remote_addr;
+    proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header  X-Forwarded-Host $server_name;
+    proxy_set_header  User-Id $user_id;
+    }
+
+}

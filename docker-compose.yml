@@ -2,24 +2,37 @@ services:
   auth:
     container_name: auth 
     restart: on-failure
-    env_file:
-      - ./Auth/development.env
+    environment:
+      - NODE_ENV=development
+      - HOST=0.0.0.0
+      - PORT=3030
+      - THUMBSNAP_KEY=0000257fd074329f238355ce4ffbc200
+      - SECRET_JWT=40871d49-21f2-45c9-852e-9d8f52f138ca
+      - SECRET_KEY_1=686ff5d3-1043-45b4-810b-244a7b4d2b54
+      - SECRET_KEY_2=7d9d2044-ae0f-45f1-95ba-8b05b48da6bb
+      - DB_CONNECTION_STRING=mongodb+srv://SHOPPI_API:OcruYE1XihzFNQOU@cluster0.0rmwddp.mongodb.net/SHOPPI?retryWrites=true&w=majority
     build:
       context: ./Auth
     image: shoppiapi.azurecr.io/auth
-    # depends_on:
-    #   - database
     expose: ["3030"]
   emailverification:
     container_name: emailverification
     restart: on-failure
-    env_file:
-      - ./EmailVerification/development.env
+    environment:
+      - NODE_ENV=development
+      - HOST=0.0.0.0
+      - PORT=3010
+      - DB_CONNECTION_STRING=mongodb+srv://SHOPPI_API:OcruYE1XihzFNQOU@cluster0.0rmwddp.mongodb.net/SHOPPI?retryWrites=true&w=majority
+      - SECRET_JWT=40871d49-21f2-45c9-852e-9d8f52f138ca
+      - MAIL_USER=verify.shopi@gmail.com
+      - MAIL_ID_CLIENTE=1002171188840-b748jpkef9791hqj9ld9kn3p44185pla.apps.googleusercontent.com
+      - MAIL_SECRET=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
+      - MAIL_REFRESH_TOKEN=1//04ZBYvtDxCxh1CgYIARAAGAQSNwF-L9IrvZLUd7YriVwLf-otgBuHE-8NOvBu--TDD0pAt2LGegquUE1nm3ZQxeF22AaPu65IdFc
+      - GATEWAY_HOST=localhost
+      - GATEWAY_PORT=443
     build:
       context: ./EmailVerification
     image: shoppiapi.azurecr.io/emailverification
-    # depends_on:
-    #   - database
     expose: ["3010"] 
   gateway:
     container_name: gateway
@@ -31,29 +44,31 @@ services:
       - auth
       - emailverification
       - posts
-    ports: ["444:443"]
-  # database:
-  #   container_name: database
-  #   restart: on-failure
-  #   image: mongo:4.4.6
-  #   expose: ["27017"]
+      - update-user
+    ports: ["443:443"]
   posts:
     container_name: posts
     restart: on-failure
-    env_file:
-      - ./PostsAll/development.env
+    environment:
+      - NODE_ENV=development
+      - HOST=0.0.0.0
+      - PORT=3040
+      - THUMBSNAP_KEY=0000257fd074329f238355ce4ffbc200
+      - DB_CONNECTION_STRING=mongodb+srv://SHOPPI_API:OcruYE1XihzFNQOU@cluster0.0rmwddp.mongodb.net/SHOPPI?retryWrites=true&w=majority
     build:
       context: ./PostsAll
-    # depends_on:
-    #   - database
+    image: shoppiapi.azurecr.io/posts
     expose: ["3040"]
   update-user:
     container_name: update-user
     restart: on-failure
-    env_file:
-      - ./UpdateUser/development.env
+    environment:
+      - NODE_ENV=development
+      - HOST=0.0.0.0
+      - PORT=3090
+      - DB_CONNECTION_STRING=mongodb+srv://SHOPPI_API:OcruYE1XihzFNQOU@cluster0.0rmwddp.mongodb.net/SHOPPI?retryWrites=true&w=majority
+      - THUMBSNAP_KEY=0000257fd074329f238355ce4ffbc200
     depends_on:
-      # - database
       - emailverification
     build:
       context: ./UpdateUser
@@ -62,12 +77,13 @@ services:
   repetidos:
     container_name: repetidos
     restart: on-failure
-    env_file:
-      - ./Repetidos/development.env
-    # depends_on:
-    #   - database
+    environment:
+      - NODE_ENV=development
+      - HOST=0.0.0.0
+      - PORT=3100
+      - DB_CONNECTION_STRING=mongodb+srv://SHOPPI_API:OcruYE1XihzFNQOU@cluster0.0rmwddp.mongodb.net/SHOPPI?retryWrites=true&w=majority
+      - THUMBSNAP_KEY=0000257fd074329f238355ce4ffbc200
     build:
       context: ./Repetidos
     image: shoppiapi.azurecr.io/repetidos
     expose: ["3100"]
-    

@@ -11,7 +11,7 @@ const multerInit = require('./config/multer.config');
 // });
 
 var corsOptions = {
-    origin: 'http://localhost:4200',
+    origin: "*",
     credentials: true
     //optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
   }

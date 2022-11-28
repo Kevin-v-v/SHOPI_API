@@ -74,7 +74,7 @@ module.exports = async (req,res)=>{
     }
 
     try{
-        const response = await axios.get('http://emailverification:3010/api/sendmail',{
+        const response = await axios.get(process.env.EV_HOST, {
             params:{
                 username: userSaved.username
             }
