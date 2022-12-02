@@ -10,7 +10,7 @@ const cors = require('cors');
 const registerRoutes = require('./routes/register.routes');
 
  dotenv.config({
-     path: path.resolve(__dirname, '../' + process.env.NODE_ENV + '.env')
+     path: path.resolve(__dirname, '../development.env')
  });
 
 var corsOptions = {
