@@ -15,7 +15,7 @@ module.exports = async function(req,res){
             msg: "Datos incompletos"
         });
     }
-    
+    console.log("ORIGINAL POST_ID: " + post_id);
 
     let post;
     let found = null;
@@ -85,10 +85,10 @@ module.exports = async function(req,res){
     }
         post.title = title;
         post.description = description;
-        
+        console.log("ORIGINAL POST: " + post);
         try{
             result = await post.save();
-            console.log(result);
+            console.log("SAVED POST: " + result);
         }catch(err){
             console.log(err);
             return res.status(500).json({
