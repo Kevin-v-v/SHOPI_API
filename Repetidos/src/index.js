@@ -6,7 +6,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 
 dotenv.config({
-    path: path.resolve(__dirname, '../' + process.env.NODE_ENV + '.env')
+    path: path.resolve(__dirname, '../development.env')
 });
 var corsOptions = {
     origin: '*',
