@@ -21,7 +21,7 @@ module.exports = {
                 count = await Post.countDocuments({status: 1});
             }
             if(count > 0){
-                pages = Math.ceil(count/10);
+                pages = Math.ceil(count/12);
                 if(page > pages){
                     return res.json({
                         success: false,
@@ -29,9 +29,9 @@ module.exports = {
                         });
                 }else{
                     if(category){
-                        posts = await Post.find({status: 1, category}).skip(page * 10).sort({ _id: -1 }).limit(10)
+                        posts = await Post.find({status: 1, category}).skip(page * 12).sort({ _id: -1 }).limit(12)
                     }else{
-                        posts = await Post.find({status: 1}).skip(page * 10).sort({ _id: -1 }).limit(10)
+                        posts = await Post.find({status: 1}).skip(page * 12).sort({ _id: -1 }).limit(12)
                     }
                 }
             }else{
@@ -154,14 +154,14 @@ module.exports = {
             count = await Post.countDocuments({user_id, status: {$ne: 0}});
             
             if(count > 0){
-                pages = Math.ceil(count/10);
+                pages = Math.ceil(count/12);
                 if(page > pages){
                     return res.json({
                         success: false,
                         msg: "Página no válida"
                         });
                 }else{
-                        posts = await Post.find({user_id, status: {$ne: 0}}).skip(page * 10).sort({ _id: -1 }).limit(10)
+                        posts = await Post.find({user_id, status: {$ne: 0}}).skip(page * 12).sort({ _id: -1 }).limit(12)
                 }
             }else{
                 return res.json({
