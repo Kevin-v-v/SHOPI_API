@@ -9,9 +9,9 @@ const mongoStore = require('connect-mongo');
 const cors = require('cors');
 const registerRoutes = require('./routes/register.routes');
 
-// dotenv.config({
-//     path: path.resolve(__dirname, '../' + process.env.NODE_ENV + '.env')
-// });
+ dotenv.config({
+     path: path.resolve(__dirname, '../' + process.env.NODE_ENV + '.env')
+ });
 
 var corsOptions = {
     origin: '*',
