@@ -1,16 +1,69 @@
-<!DOCTYPE HTML >
-<html>
+<!DOCTYPE html>
 
-<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<div class = "imagen">
+    <img src="https://thumbsnap.com/i/CY5r6qMM.png">
+</div>
+<header>
+    <h4 align = "center">Validación del Correo Electrónico</h2>
+</header>
 
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title></title>
+<section>
+    <div class = "Datos">
+        <h5>Hola {{name}}, verifica tu correo.</h3>
+        <div class = "boton">
+            <button type = "button" class = "btn btn-outline-primary" onclick="location.href='{{url}}'">Haz click para verificar</button>
+        </div>
+        <h7>(Esta verificación es válida por una hora.)</h3>
+    
+        
+    </div>
+</section>
+    
 
-<body>
-    <h1>Hola {{name}}</h1>
-    <a href={{url}}>Verificate padrino</a>
-</body>
 
-</html>
+
+
+
+<style>
+
+    .imagen {
+        border-radius: 3px;
+        width: 40%;
+        background-color: rgb(194, 187, 230);
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 10px;
+        
+    }
+
+    img {
+        padding: 10px;
+        display: block;
+        width: 150px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    header {
+        margin-top: 10px;
+        margin-left: auto;
+        margin-right: auto;
+        width: fit-content;
+    }
+
+    section {
+        text-align: center;
+        padding: 10px;
+        margin-left: auto;
+        margin-right: auto; 
+        width: 25%; 
+    }
+
+    .boton {
+        padding-top: 5px;
+        text-align: center;
+        padding-bottom: 10px;
+    }
+</style>
