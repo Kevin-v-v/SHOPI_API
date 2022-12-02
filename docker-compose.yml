@@ -9,7 +9,7 @@ services:
     image: shoppiapi.azurecr.io/auth
     # depends_on:
     #   - database
-    expose: ["3030"]
+    ports: ["3030:3030"]
   emailverification:
     container_name: emailverification
     restart: on-failure
@@ -20,18 +20,18 @@ services:
     image: shoppiapi.azurecr.io/emailverification
     # depends_on:
     #   - database
-    expose: ["3010"] 
-  gateway:
-    container_name: gateway
-    restart: on-failure
-    build:
-      context: ./Orquestador
-    image: shoppiapi.azurecr.io/orquestador
-    depends_on:
-      - auth
-      - emailverification
-      - posts
-    ports: ["444:443"]
+    ports: ["3010:3010"]
+  # gateway:
+  #   container_name: gateway
+  #   restart: on-failure
+  #   build:
+  #     context: ./Orquestador
+  #   image: shoppiapi.azurecr.io/orquestador
+  #   depends_on:
+  #     - auth
+  #     - emailverification
+  #     - posts
+    # ports: ["444:443"]
   # database:
   #   container_name: database
   #   restart: on-failure
@@ -46,7 +46,7 @@ services:
       context: ./PostsAll
     # depends_on:
     #   - database
-    expose: ["3040"]
+    ports: ["3040:3040"]
   update-user:
     container_name: update-user
     restart: on-failure
@@ -58,7 +58,7 @@ services:
     build:
       context: ./UpdateUser
     image: shoppiapi.azurecr.io/update-user
-    expose: ["3090"]
+    ports: ["3090:3090"]
   repetidos:
     container_name: repetidos
     restart: on-failure
@@ -69,5 +69,5 @@ services:
     build:
       context: ./Repetidos
     image: shoppiapi.azurecr.io/repetidos
-    expose: ["3100"]
+    ports: ["3100:3100"]
     
