@@ -66,7 +66,7 @@ module.exports = async (req,res) => {
         var mailOptions = {
             from: process.env.MAIL_USER,
             to: user.email,
-            subject: 'Verifica tu correo electrónico, SHOPI',
+            subject: 'Verifica tu correo electrónico SHOPPI',
             template: 'index',
             context: {
                 url: `https://${process.env.GATEWAY_HOST}:${process.env.GATEWAY_PORT}/api/verify/${token}`,
