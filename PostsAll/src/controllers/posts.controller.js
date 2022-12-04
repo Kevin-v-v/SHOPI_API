@@ -7,7 +7,16 @@ module.exports = {
         let page = 0;
         let total_count = 0;
         let category = req.query.category;
+        let keywordRegex = new RegExp(req.query.keyword, "i") ;
+        let parameters = {
+            status: 1
+        };
+        if(category) parameters.category = category
 
+        parameters.title = {
+            $regex : keywordRegex
+        };
+        
         if(!isNaN(req.query.page)){
             page = req.query.page - 1;
         } 
@@ -15,24 +24,20 @@ module.exports = {
             let pages = 0;
             let count = 0;
         try{
-            if(category){
-                count = await Post.countDocuments({status: 1, category})
-            }else{
-                count = await Post.countDocuments({status: 1});
-            }
+
+                count = await Post.countDocuments(parameters);
+            
             if(count > 0){
+                console.log(count)
                 pages = Math.ceil(count/12);
-                if(page > pages){
+                console.log(pages);
+                if(page + 1 > pages){
                     return res.json({
                         success: false,
                         msg: "Página no válida"
                         });
                 }else{
-                    if(category){
-                        posts = await Post.find({status: 1, category}).skip(page * 12).sort({ _id: -1 }).limit(12)
-                    }else{
-                        posts = await Post.find({status: 1}).skip(page * 12).sort({ _id: -1 }).limit(12)
-                    }
+                        posts = await Post.find(parameters).skip(page * 12).sort({ _id: -1 }).limit(12)
                 }
             }else{
                 return res.json({
