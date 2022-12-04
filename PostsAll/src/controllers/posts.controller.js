@@ -28,9 +28,7 @@ module.exports = {
                 count = await Post.countDocuments(parameters);
             
             if(count > 0){
-                console.log(count)
                 pages = Math.ceil(count/12);
-                console.log(pages);
                 if(page + 1 > pages){
                     return res.json({
                         success: false,
