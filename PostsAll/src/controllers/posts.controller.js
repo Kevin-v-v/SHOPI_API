@@ -99,13 +99,6 @@ module.exports = {
                         success: false,
                         msg: "El post no existe"
                     });
-                }else if(post.status == 2){
-                    if(post.user_id != user_id){
-                        return res.status(404).json({
-                            success: false,
-                            msg: "El post no está disponible"
-                        });
-                    }
                 }
                 try{
                     let user = await User.findById(post.user_id);
