@@ -8,10 +8,7 @@ module.exports = async (req,res)=>{
     let data = getTokenData(req.params.token);
 
     if(!data){
-        return res.json({
-            success: false,
-            msg: "Error al obtener datos del usuario"
-        })
+        return res.redirect('https://purple-sky-01e24dc0f.2.azurestaticapps.net/email/error');
     }
 
     let user;
@@ -19,41 +16,26 @@ module.exports = async (req,res)=>{
     try{
         user = await User.findById(data.data.code) || null;
         if(!user){
-            return res.json({
-                success: false,
-                msg: "El usuario no existe"
-            })
+            return res.redirect('https://purple-sky-01e24dc0f.2.azurestaticapps.net/email/error');
         }
         if(user.user_status === 1){
-            return res.json({
-                success: false,
-                msg: "El usuario ya fue verificado"
-            })
+            return res.redirect('https://purple-sky-01e24dc0f.2.azurestaticapps.net/email/verified');
         }
         user.user_status = 1;
     }catch(error){
         console.log(error);
-        return res.json({
-            success: false,
-            msg: "Error al verificar el correo electrónico"
-        })
+        return res.redirect('https://purple-sky-01e24dc0f.2.azurestaticapps.net/email/error');
 
     }
 
     try{
         await user.save();
-        return res.json({
-            success: true,
-            msg: "Verificación exitosa"
-        })
+        return res.redirect('https://purple-sky-01e24dc0f.2.azurestaticapps.net/email/success');
         
 
     }catch(error){
         console.log(error);
-        return res.json({
-            success: false,
-            msg: "Error al verificar el correo electrónico"
-        })
+        return res.redirect('https://purple-sky-01e24dc0f.2.azurestaticapps.net/email/error');
 
     }
     
