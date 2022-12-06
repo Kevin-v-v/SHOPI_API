@@ -89,14 +89,23 @@ module.exports = {
     },
     getOne: async function(req,res){
         const post_id = req.params.id;
+        const user_id = req.headers['user-id'];
+        
         try{
             let post = await Post.findById(post_id); 
             if(post){
-                if(post.status != 1){
+                if(post.status == 0){
                     return res.status(404).json({
                         success: false,
-                        msg: "El post no está disponible"
+                        msg: "El post no existe"
                     });
+                }else if(post.status == 2){
+                    if(post.user_id != user_id){
+                        return res.status(404).json({
+                            success: false,
+                            msg: "El post no está disponible"
+                        });
+                    }
                 }
                 try{
                     let user = await User.findById(post.user_id);
