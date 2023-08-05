@@ -1,25 +1,15 @@
 services:
-  login:
-    container_name: login 
+  auth:
+    container_name: auth 
     restart: on-failure
     env_file:
-      - ./Login/development.env
+      - ./Auth/development.env
     build:
-      context: ./Login
-    depends_on:
-      - database
+      context: ./Auth
+    image: shoppiapi.azurecr.io/auth
+    # depends_on:
+    #   - database
     expose: ["3030"]
-  register:
-    container_name: register
-    restart: on-failure
-    env_file:
-      - ./Register/development.env
-    build:
-      context: ./Register
-    depends_on:
-      - database
-      - emailverification
-    expose: ["3020"]
   emailverification:
     container_name: emailverification
     restart: on-failure
@@ -27,76 +17,26 @@ services:
       - ./EmailVerification/development.env
     build:
       context: ./EmailVerification
-    depends_on:
-      - database
+    image: shoppiapi.azurecr.io/emailverification
+    # depends_on:
+    #   - database
     expose: ["3010"] 
   gateway:
     container_name: gateway
     restart: on-failure
     build:
       context: ./Orquestador
+    image: shoppiapi.azurecr.io/orquestador
     depends_on:
-      - login
-      - register
+      - auth
       - emailverification
       - posts
     ports: ["444:443"]
-  database:
-    container_name: database
-    restart: on-failure
-    image: mongo:4.4.6
-    expose: ["27017"]
-  # main-posts:
-  #   container_name: main-posts
+  # database:
+  #   container_name: database
   #   restart: on-failure
-  #   env_file:
-  #     - ./Posts/MainPosts/development.env
-  #   build:
-  #     context: ./Posts/MainPosts
-  #   depends_on:
-  #     - database
-  #   expose: ["3040"]
-  # create-posts:
-  #   container_name: create-posts
-  #   restart: on-failure
-  #   env_file:
-  #     - ./Posts/Create/development.env
-  #   depends_on:
-  #     - database
-  #   build:
-  #     context: ./Posts/Create
-  #   expose: ["3050"]
-  # toggle-posts:
-  #   container_name: toggle-posts
-  #   restart: on-failure
-  #   env_file:
-  #     - ./Posts/Toggle/development.env
-  #   depends_on:
-  #     - database
-  #   build:
-  #     context: ./Posts/Toggle
-  #   expose: ["3080"]
-  # update-posts:
-  #   container_name: update-posts
-  #   restart: on-failure
-  #   env_file:
-  #     - ./Posts/Update/development.env
-  #   depends_on:
-  #     - database
-  #   build:
-  #     context: ./Posts/Update
-  #   expose: ["3070"]
-  # delete-posts:
-  #   container_name: delete-posts
-  #   restart: on-failure
-  #   env_file:
-  #     - ./Posts/Delete/development.env
-  #   depends_on:
-  #     - database
-  #   build:
-  #     context: ./Posts/Delete
-  #   expose: ["3060"]
-
+  #   image: mongo:4.4.6
+  #   expose: ["27017"]
   posts:
     container_name: posts
     restart: on-failure
@@ -104,8 +44,8 @@ services:
       - ./PostsAll/development.env
     build:
       context: ./PostsAll
-    depends_on:
-      - database
+    # depends_on:
+    #   - database
     expose: ["3040"]
   update-user:
     container_name: update-user
@@ -113,19 +53,21 @@ services:
     env_file:
       - ./UpdateUser/development.env
     depends_on:
-      - database
+      # - database
       - emailverification
     build:
       context: ./UpdateUser
+    image: shoppiapi.azurecr.io/update-user
     expose: ["3090"]
   repetidos:
     container_name: repetidos
     restart: on-failure
     env_file:
       - ./Repetidos/development.env
-    depends_on:
-      - database
+    # depends_on:
+    #   - database
     build:
       context: ./Repetidos
+    image: shoppiapi.azurecr.io/repetidos
     expose: ["3100"]
     

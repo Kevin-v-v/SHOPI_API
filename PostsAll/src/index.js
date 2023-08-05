@@ -4,6 +4,7 @@ const deleteRoutes = require('./routes/delete.routes');
 const updateRoutes = require('./routes/update.routes');
 const toggleRoutes = require('./routes/toggle.routes');
 const mainRoutes = require('./routes/posts.routes');
+const categoriesRoutes = require('./routes/categories.routes');
 const mongoose = require('mongoose');
 
 // const multerInit = require('./config/multer.config');
@@ -31,6 +32,7 @@ app.use(deleteRoutes);
 app.use(updateRoutes);
 app.use(mainRoutes);
 app.use(toggleRoutes);
+app.use(categoriesRoutes)
 
 // mongoose.connection.on('disconnected', () => {
 //     db_connection();

@@ -83,9 +83,12 @@ module.exports = async function(req,res){
         }
 
     }
-
+        post.title = title;
+        post.description = description;
+        
         try{
             result = await post.save();
+            console.log(result);
         }catch(err){
             console.log(err);
             return res.status(500).json({

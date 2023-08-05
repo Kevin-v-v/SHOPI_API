@@ -63,7 +63,7 @@ module.exports = async function (req, res){
     }
 
     const formData = new FormData();
-    console.log(image);
+
     formData.append('key', process.env.THUMBSNAP_KEY);
     formData.append('media', fs.createReadStream(image.path));
     const image_response = await axios.post('https://thumbsnap.com/api/upload', formData, {
@@ -75,12 +75,9 @@ module.exports = async function (req, res){
         }
         console.log("Image Locally Deleted Successfully");
     });
-    // let answer = JSON.parse(image_response);
-    // console.log(answer)
+
     if(!image_response.data.success){
-        console.log("Error al subir la imagen: " + image_response);
-        //console.log(image_response.data.error.message);
-        console.log(image_response.data);
+        console.log(image_response.data.error.message);
         return res.status(500).json({
             success: false,
             msg: "No se pudo guardar la imagen"

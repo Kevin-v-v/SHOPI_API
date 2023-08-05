@@ -6,8 +6,8 @@ module.exports = async function (req,res){
     try {
         admin = await User.findById(admin_id);
         if(admin){
-            if(!admin.user_type === 0){
-                res.status(403).json({
+            if(admin.user_type != 0){
+                return res.status(403).json({
                     success: false,
                     msg: "Usuario no tiene permisos para realizar esta acción"
                 })
@@ -15,7 +15,7 @@ module.exports = async function (req,res){
         }
     } catch (error) {
         console.log(error);
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
             msg: "Error al verificar datos del usuario"
         })
@@ -49,7 +49,7 @@ module.exports = async function (req,res){
 
     try{
         userSaved = await user.save();
-        res.json({
+        return res.json({
             success: true,
             msg: "Usuario eliminado con éxito"
         })

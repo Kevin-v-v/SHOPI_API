@@ -201,6 +201,7 @@ module.exports = {
                         user_username: user.username,
                         user_name : user.name,
                         user_last_name: user.last_name,
+                        post_status: post.status,
                         image: post.image,
                         category: post.category,
                         whatsapp_url : `https://wa.me/+521${user.phone}`
